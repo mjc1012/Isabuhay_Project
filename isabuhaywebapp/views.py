@@ -28,6 +28,8 @@ from django.db.models import Q
 import requests
 from pdf2image import convert_from_path
 from google.cloud import vision
+from smart_open import smart_open
+import PyPDF2
 
 class DisplayAdminPage(LoginRequiredMixin, TemplateView):
     template_name = 'displayAdminPage.html'
@@ -960,19 +962,9 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         docxObject = self.getDocument(id)
         data['object'] = docxObject
         FILE_PATH = docxObject.testDocx.url
-        req = requests.get(FILE_PATH)
-        filename = req.url[FILE_PATH.rfind('/')+1:]
-        filename = "media/" + filename.split("?")[0]
-
-        with open(filename, 'wb') as f:
-            for chunk in req.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
-                    
-        txt = d2t.process(filename)
+        txt = d2t.process(smart_open(FILE_PATH, 'rb'))
 
         values = txt.split()
-        self.removeFile(filename)
 
         if 'PID' in values[4]:
             data['pid'] = values[5]
@@ -1099,21 +1091,119 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         data['object'] = pdfObject
         FILE_PATH = pdfObject.testPDF.url
 
-        req = requests.get(FILE_PATH)
-        filename = req.url[FILE_PATH.rfind('/')+1:]
-        filename = "media/" + filename.split("?")[0]
-
-        with open(filename, 'wb') as f:
-            for chunk in req.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
+        pdfReader = PyPDF2.PdfFileReader(smart_open(FILE_PATH, 'rb'))
+        pageObj = pdfReader.getPage(0)
         
-        pages = convert_from_path(filename, 500)
-        newfilename = 'newpdf.jpg'
-        pages[0].save(newfilename, 'JPEG')
+        values = pageObj.extractText().split()
+        
+        if 'PID' in values[4]:
+            data['pid'] = values[5]
 
-        data = self.ocrModel(newfilename, type, data)
-        self.removeFile(filename)
+        if 'Source' in values[10]:
+            data['source'] = values[11]
+
+        if 'Lab' in values[12] and 'Number' in values[13]:
+            data['labNumber'] = values[14]
+
+        if 'Requested' in values[22]:
+            data['dateRequested'] = values[23]+" "+values[24]+" "+values[25]
+            if "PM" in data['dateRequested']:
+                dateArr = data['dateRequested'].split()
+                
+                newHour = int(dateArr[1][:2]) + 12
+                
+                if newHour > 23:
+                    data['dateRequested'] = data['dateRequested'][:-3]
+                else:
+                    dateArr[1] = str(newHour) + dateArr[1][2:]
+                    finalDate = dateArr[0] + " " + dateArr[1]
+                    data['dateRequested'] = finalDate
+
+            elif "AM" in data['dateRequested']:
+                data['dateRequested'] = data['dateRequested'][:-3]
+
+        if 'Received' in values[26]:
+            data['dateReceived'] = values[27]+" "+values[28]+" "+values[29]
+            if "PM" in data['dateReceived']:
+                dateArr = data['dateReceived'].split()
+                
+                newHour = int(dateArr[1][:2]) + 12
+                
+                if newHour > 23:
+                    data['dateReceived'] = data['dateReceived'][:-3]
+                else:
+                    dateArr[1] = str(newHour) + dateArr[1][2:]
+                    finalDate = dateArr[0] + " " + dateArr[1]
+                    data['dateReceived'] = finalDate
+
+            elif "AM" in data['dateReceived']:
+                data['dateReceived'] = data['dateReceived'][:-3]
+
+        if 'White' in values[39] and 'Blood' in values[40] and 'Cells' in values[41]:
+            data['whiteBloodCells'] = values[42]
+
+        if 'Red' in values[45] and 'Blood' in values[46] and 'Cells' in values[47]:
+            data['redBloodCells'] = values[48]
+
+        if 'Hemoglobin' in values[51]:
+            data['hemoglobin'] = values[52]
+
+        if 'Hematocrit' in values[55]:
+            data['hematocrit'] = values[56]
+
+        if 'Mean' in values[59] and 'Corpuscular' in values[60] and 'Volume' in values[61]:
+            data['meanCorpuscularVolume'] = values[62]
+
+        if 'Mean' in values[65] and 'Corpuscular' in values[66] and 'Hb' in values[67]:
+            data['meanCorpuscularHb'] = values[68]
+
+        if 'Mean' in values[71] and 'Corpuscular' in values[72] and 'Hb' in values[73] and 'Conc' in values[74]:
+            data['meanCorpuscularHbConc'] = values[75]
+
+        if 'RBC' in values[78] and 'Distribution' in values[79] and 'Width' in values[80]:
+            data['rbcDistributionWidth'] = values[81]
+
+        if 'Platelet' in values[84] and 'Count' in values[85]:
+            data['plateletCount'] = values[86]
+
+        if 'Neutrophils' in values[92]:
+            data['neutrophils'] = values[93]
+
+        if 'Lymphocytes' in values[96]:
+            data['lymphocytes'] = values[97]
+
+        if 'Monocytes' in values[100]:
+            data['monocytes'] = values[101]
+
+        if 'Eosinophils' in values[104]:
+            data['eosinophils'] = values[105]
+
+        if 'Basophils' in values[108]:
+            data['basophils'] = values[109]
+
+        if 'Bands' in values[112]:
+            data['bands'] = values[113]
+
+        if 'Absolute' in values[119] and 'Neutrophils' in values[120] and 'Count' in values[121]:
+            data['absoluteNeutrophilsCount'] = values[122]
+
+        if 'Absolute' in values[125] and 'Lymphocyte' in values[126] and 'Count' in values[127]:
+            data['absoluteLymphocyteCount'] = values[128]
+
+        if 'Absolute' in values[131] and 'Monocyte' in values[132] and 'Count' in values[133]:
+            data['absoluteMonocyteCount'] = values[134]
+
+
+        if 'Absolute' in values[137] and 'Eosinophil' in values[138] and 'Count' in values[139]:
+            data['absoluteEosinophilCount'] = values[140]
+
+        if 'Absolute' in values[143] and 'Basophil' in values[144] and 'Count' in values[145]:
+            data['absoluteBasophilCount'] = values[146]
+
+        if 'Absolute' in values[149] and 'Band' in values[150] and 'Count' in values[151]:
+            data['absoluteBandCount'] = values[152]
+
+        pdfFileObj.close()
         
         return pdfObject, data
 
@@ -1126,17 +1216,84 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         data['object'] = imgObject
         FILE_PATH = imgObject.testImage.url
 
-        req = requests.get(FILE_PATH)
-        filename = req.url[FILE_PATH.rfind('/')+1:]
-        filename = "media/" + filename.split("?")[0]
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'static\\ocr\\vision-api.json'
 
-        with open(filename, 'wb') as f:
-            for chunk in req.iter_content(chunk_size=8192):
-                if chunk:
-                    f.write(chunk)
+        client = vision.ImageAnnotatorClient()
 
-        data = self.ocrModel(filename, type, data)
-        self.removeFile(filename)
+        with smart_open(FILE_PATH, 'rb') as image_file:
+            content = image_file.read()
+
+        image = vision.Image(content=content)
+        response = client.text_detection(image=image)  
+        df = pd.DataFrame(columns=['locale', 'description'])
+
+        texts = response.text_annotations
+        for text in texts:
+            df = df.append(
+                dict(
+                    locale=text.locale,
+                    description=text.description
+                ),
+                ignore_index=True
+            )
+        
+        data['labNumber'] = df['description'][114]
+        data['source'] = df['description'][110]
+        data['pid'] = df['description'][9]
+
+        data['dateRequested'] = df['description'][18] + ' ' + df['description'][19] + ' ' + df['description'][20]
+        if "PM" in data['dateRequested']:
+            dateArr = data['dateRequested'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
+                data['dateRequested'] = data['dateRequested'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateRequested'] = finalDate
+
+        elif "AM" in data['dateRequested']:
+            data['dateRequested'] = data['dateRequested'][:-3]
+
+        data['dateReceived'] = df['description'][126] + ' ' + df['description'][127] + ' ' + df['description'][128] 
+        if "PM" in data['dateReceived']:
+            dateArr = data['dateReceived'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
+                data['dateReceived'] = data['dateReceived'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateReceived'] = finalDate
+
+        elif "AM" in data['dateReceived']:
+            data['dateReceived'] = data['dateReceived'][:-3]
+        
+        data['whiteBloodCells'] = df['description'][87]
+        data['redBloodCells'] = df['description'][88]
+        data['hemoglobin'] = df['description'][89]
+        data['hematocrit'] = df['description'][90]
+        data['meanCorpuscularVolume'] = df['description'][91]
+        data['meanCorpuscularHb'] = df['description'][92]
+        data['meanCorpuscularHbConc'] = df['description'][93]
+        data['rbcDistributionWidth'] = df['description'][94]
+        data['plateletCount'] = df['description'][95]
+        data['neutrophils'] = df['description'][96]
+        data['lymphocytes'] = df['description'][97]
+        data['monocytes'] = df['description'][98]
+        data['eosinophils'] = df['description'][99]
+        data['basophils'] = df['description'][100]
+        data['bands'] = df['description'][101]
+        data['absoluteNeutrophilsCount'] = df['description'][102]
+        data['absoluteLymphocyteCount'] = df['description'][103]
+        data['absoluteMonocyteCount'] = df['description'][104]
+        data['absoluteEosinophilCount'] = df['description'][105]
+        data['absoluteBasophilCount'] = df['description'][106]
+        data['absoluteBandCount'] = df['description'][107]
 
         return imgObject, data
     
