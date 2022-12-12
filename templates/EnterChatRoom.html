@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>Isabuhay - Enter Chat Room</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<!--
+
+TemplateMo 570 Chain App Dev
+
+https://templatemo.com/tm-570-chain-app-dev
+
+-->
+
+     <!-- Additional CSS Files -->
+     <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+ 
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/jeff_custom.css' %}">
+    <!-- Buttonsss -->
+    
+    <style>
+      button{
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+        border-radius: 25px;
+        padding: 10px;
+        width: 125px;
+        color: white;
+        border: none;
+        background-image: linear-gradient(to right, rgb(88,110,236), rgb(43,217,252));
+      }
+    </style>
+
+  </head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#" class="logo">
+              <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAllCBCTestResult' %}">Reports</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+              <li class="scroll-to-section"><a href="{% url 'PromoOptions' 'pay' %}">Pay</a></li>
+              {% if user.is_admin == True %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAdminPage' %}">Admin</a></li>
+              {% endif %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+              <li class="scroll-to-section"><a href="#" class="active">Messages</a></li>
+              <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+            </ul>       
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div id="about" class="about-us section">
+    <div class="container">
+      {% include 'NotificationMessages.html' %}
+      <div class="row">
+        <div class="col-lg-6  wow slideInLeft" style="margin-top: 20px;">
+
+          <div class="section-heading" data-wow-duration="1s" data-wow-delay="0.5s" style="text-align: center;">
+              <h4>Ask Your <em>Question</em></h4>
+            <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
+          </div>
+          <form id="msform" action="" method="POST">
+            {% csrf_token %}
+            <fieldset>
+              <h2 class="fs-title">Messages</h2>
+            <h3 class="fs-subtitle" id="display"></h3>
+            <input type="button" value="Cancel" onclick="redirectBack()" name="previous" class="action-button-previous">
+            <input type="submit" class="action-button"  value="Enter"/>
+            </fieldset>
+                  
+        </form>
+        </div>
+        <div class="col-lg-6">
+          <div class="right-image">
+            <img src="{% static 'assets/images/about-right-dec.png' %}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+  
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+  <script>
+    function redirectBack(){
+      window.location.href = "{% url 'DisplayClientSide' %}"
+      }
+
+      $(document).ready(function(){
+  
+  setInterval(function(){
+    setTimeout(function(){
+      if ($('.alert').length > 0) {
+        $('.alert').remove();
+      }
+    }, 3000)
+
+      $.ajax({
+          type: 'GET',
+          url : "/unread-messages",
+          success: function(response){
+              console.log(response);
+              $("#display").empty();
+              for (var key in response.messages)
+              {
+                str1 = "<span>You have"
+                str2 = str1.concat(' ', response.messages[key][1])
+                str3 = str2.concat(' ', "unseen messages from")
+                str4 = str3.concat(' ', response.messages[key][0])
+                temp = str4.concat(' ', "</span>")
+                $("#display").append(temp);
+              }
+          },
+          error: function(response){
+            alert('Something went wrong with the unread messages notification!')
+          }
+      });
+  },1000);
+  })
+</script>
+</body>
+</html>

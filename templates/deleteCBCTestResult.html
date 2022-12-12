@@ -1,0 +1,28 @@
+<!-- Modal -->
+<div class="modal fade" id="deleteModal{{ object.id }}" tabindex="-1" aria-labelledby="deleteModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalTitle">Delete CBC Test Result</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align:justify;" >
+        <p>
+        Are you sure you want to delete this?
+        </p>
+        <p>
+          If you would still like your CBC Test Result deleted, click "Delete CBC Test Result".
+        </p>
+      </div>
+      <div class="modal-footer">
+        <form method="POST" action="{% url 'DeleteCBCTestResult' object.id %}">
+          {% csrf_token %}
+          <input type="submit" class="btn btn-primary" value="Delete CBC Test Result">
+        </form>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

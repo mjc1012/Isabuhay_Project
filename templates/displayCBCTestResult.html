@@ -1,0 +1,550 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Isabuhay - CBC Test Result</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!--
+TemplateMo 570 Chain App Dev
+https://templatemo.com/tm-570-chain-app-dev
+-->
+
+     <!-- Additional CSS Files -->
+     <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+  </head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+ <!-- ***** Header Area Start ***** -->
+ <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#" class="logo">
+                <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAllCBCTestResult' %}">Reports</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+              <li class="scroll-to-section"><a href="{% url 'PromoOptions' 'pay' %}">Pay</a></li>
+              {% if user.is_admin == True %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAdminPage' %}">Admin</a></li>
+              {% endif %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+              <li class="scroll-to-section"><a href="{% url 'ShowChatRoom' %}">Messages</a></li>
+              <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+            </ul>         
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+  
+
+  <div id="clients" class="pricing-tables">
+    <div class="container">
+  {% include 'NotificationMessages.html' %}
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading" style="margin-bottom: 40px;">
+            <h4><em>CBC</em> Test Result</h4>
+            <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
+            <div class = "row" style="display: flex; flex-wrap: nowrap;">
+              <p style="text-align: left; margin: 10px 0; width: 60%;">Lab Number:  {{ object.labNumber  }}<br>Source: {{object.source}}</p>
+              <p style="text-align: left; margin: 10px 0; width: 60%;">Date Received:  {{ object.dateRequested  }}<br>Date Requested: {{object.dateReceived}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="naccs">
+            <div class="grid">
+
+              <div class="row">
+                <div class="col-lg-7 align-self-center">
+                  <div class="menu">
+                    <div class="first-thumb active">
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="category">Test</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="category">Results</span>
+                          </div> 
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">Reference Interval</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                    <br>
+                    <h6>Complete Blood Count</h6>
+                    <div class="first-thumb active">
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>White Blood Cells</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="category">{{ object.whiteBloodCells }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9/L</span>
+                          </div> 
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">4.00~10.50</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Red Blood Cells</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.redBloodCells }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^12/L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">4.70~6.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Hemoglobin</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.hemoglobin }}<br></span>
+                            <span class="date" style="font-size: 13px;">g/L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">135~180</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Hemoglobin</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.hemoglobin }}<br></span>
+                            <span class="date" style="font-size: 13px;">g/L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">135~180</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Hematocrit</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.hematocrit }}<br></span>
+                            <span class="date" style="font-size: 13px;">-</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">0.42~0.52</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Mean Corspuscular Volume</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.meanCorpuscularVolume }}<br></span>
+                            <span class="date" style="font-size: 13px;">fL</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">78~100</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Mean Corspuscular Hb</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.meanCorpuscularHb }}<br></span>
+                            <span class="date" style="font-size: 13px;">pg</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">27~31</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Mean Corspuscular Hb Conc.</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.meanCorpuscularHbConc }}<br></span>
+                            <span class="date" style="font-size: 13px;">-</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">0.32~0.36</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>RBC Distribution Width</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.rbcDistributionWidth }}<br></span>
+                            <span class="date" style="font-size: 13px;">%</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">11.0~16.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h7>Platelet Count</h7>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.plateletCount }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9/L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">150~450</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <h6>Diff. Count (Relative)</h6>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Neutrophils</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.neutrophils }}<br></span>
+                            <span class="date" style="font-size: 13px;">%</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">50.0~70.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Lymphocytes</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.lymphocytes }}<br></span>
+                            <span class="date" style="font-size: 13px;">%</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">18.0~42.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Monocytes</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.monocytes }}<br></span>
+                            <span class="date" style="font-size: 13px;">%</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">2.0~11.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Eosinophils</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.eosinophils }}<br></span>
+                            <span class="date" style="font-size: 13px;">%</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">0.0~6.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Basophils</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.basophils }}<br></span>
+                            <span class="date" style="font-size: 13px;">%</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">0.0~2.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Bands</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.bands }}<br></span>
+                            <span class="date" style="font-size: 13px;">%</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">0.0~5.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <br>
+                    <h6>Diff. Count (Absolute)</h6>
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Absolute Neutrophils Count</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.absoluteNeutrophilsCount }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">1.30~6.0</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Absolute Lymphocyte Count</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.absoluteLymphocyteCount }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating">1.50~3.50</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Absolute Monocyte Count</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.absoluteMonocyteCount }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating"> <1.00 </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Absolute Eosinophil Count</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.absoluteEosinophilCount }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating"> <0.70 </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Absolute Basophil Count</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.absoluteBasophilCount }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating"> <0.10 </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="last-thumb" style="margin-bottom: 40px;">
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h8>Absolute Band Count</h8>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">{{ object.absoluteBandCount }}<br></span>
+                            <span class="date" style="font-size: 13px;">10^9L</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <span class="rating"> <1.00 </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>         
+              </div>
+
+              <div class="col-lg-7" style="width: 40%">
+                <img src="{{ object.testImage.testImage.url }}" style="margin-bottom: 10px;"><br>
+                <div class="col-lg-12" style="width: 400px; display: flex; flex-wrap: nowrap;" >
+                  <div class="white-button first-button scroll-to-section" style="padding: 10px">
+                    <a href="{% url 'UpdateCBCTestResult' object.id %}">Update</a>
+                  </div>
+                  
+                  <div class="white-button first-button scroll-to-section" style="padding: 10px">
+                    <a data-bs-toggle="modal" data-bs-target="#deleteModal{{ object.id }}">Delete</a>
+                  </div>
+              </div>
+              </div>
+              
+            </div>
+
+            <div class="row">
+              <div class="white-button first-button scroll-to-section" style="margin-left:-20px;">
+                <a href="{% url 'DisplayAllCBCTestResult' %}">Back</a>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'DeleteCBCTestResult.html' %}
+
+  <!-- Scripts -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+  
+  <script>
+    setTimeout(function(){
+      if ($('.alert').length > 0) {
+        $('.alert').remove();
+      }
+    }, 3000)
+  </script> 
+</body>
+</html>

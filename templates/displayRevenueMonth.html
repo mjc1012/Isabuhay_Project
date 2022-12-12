@@ -1,0 +1,319 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>Isabuhay - Reports</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!--
+
+TemplateMo 570 Chain App Dev
+
+https://templatemo.com/tm-570-chain-app-dev
+
+-->
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/krl_custom.css' %}">
+  </head>
+
+  <body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+      <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+  
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <nav class="main-nav">
+              <!-- ***** Logo Start ***** -->
+               <a href="#" class="logo">
+                <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev" w>
+              </a>
+              <!-- ***** Logo End ***** -->
+              <!-- ***** Menu Start ***** -->
+              <ul class="nav">
+                  <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+                  <li class="scroll-to-section"><a href="{% url 'DisplayAllUsers' %}">Users List</a></li>
+                  <li class="scroll-to-section"><a href="{% url 'DisplayUsersMonthly' %}">Users Per Month</a></li>
+                  <li class="scroll-to-section"><a href="{% url 'DisplayPaymentList' %}">Payments List</a></li>
+                  <li class="scroll-to-section"><a href="#" class="active">Payments Per Month</a></li>
+                  <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+                  <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+                  <li class="scroll-to-section"><a href="{% url 'ShowChatRoom' %}">Messages</a></li>
+                  <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+              </ul>            
+              <a class='menu-trigger'>
+                  <span>Menu</span>
+              </a>
+              <!-- ***** Menu End ***** -->
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    
+    <div class="container">
+      <div class="all-usasd">
+      <div class="row" >
+        <div class="col-md-12 mt-4">
+                <div class="card-header bg-info text-white " style="margin-top:200px ;">
+                    Dashboard Statistics
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a class="text-decoration-none text-dark" href="{% url 'DisplayAllUsers' %}">
+                                <div class="card my-card shadow">
+                                    <div class="card-body text-center">
+                                        <h4>Users for December</h4>            
+                                        <h3 id="usercount"></h3>
+                                    </div>
+                                </div>
+                            </a>
+                          </div>
+                        <div class="col-md-4">
+                            <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                                <div class="card my-card shadow">
+                                    <div class="card-body text-center">
+                                        <h4>Users for November</h4>
+                                        <h3 id="novcount"></h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                          <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                              <div class="card my-card shadow">
+                                  <div class="card-body text-center">
+                                      <h4>Users for October</h4>
+                                      <h3 id="octcount"></h3>
+                                  </div>
+                              </div>
+                          </a>
+                      </div>
+                      <div class="col-md-4">
+                        <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center">
+                                    <h4>Users for September</h4>
+                                    <h3 id="sepcount"></h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                      <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                          <div class="card my-card shadow">
+                              <div class="card-body text-center">
+                                  <h4>Users for August</h4>
+                                  <h3 id="augcount"></h3>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+                  <div class="col-md-4">
+                    <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                        <div class="card my-card shadow">
+                            <div class="card-body text-center">
+                                <h4>Users for July</h4>
+                                <h3 id="julcount"></h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                  <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                      <div class="card my-card shadow">
+                          <div class="card-body text-center">
+                              <h4>Users for June</h4>
+                              <h3 id="juncount"></h3>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+              <div class="col-md-4">
+                <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                    <div class="card my-card shadow">
+                        <div class="card-body text-center">
+                            <h4>Users for May</h4>
+                            <h3 id="maycount"></h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-4">
+              <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                  <div class="card my-card shadow">
+                      <div class="card-body text-center">
+                          <h4>Users for April</h4>
+                          <h3 id="aprcount"></h3>
+                      </div>
+                  </div>
+              </a>
+          </div>
+          <div class="col-md-4">
+            <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                <div class="card my-card shadow">
+                    <div class="card-body text-center">
+                        <h4>Users for March</h4>
+                        <h3 id="marcount"></h3>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+          <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+              <div class="card my-card shadow">
+                  <div class="card-body text-center">
+                      <h4>Users for February</h4>
+                      <h3 id="febcount"></h3>
+                  </div>
+              </div>
+          </a>
+      </div>
+      <div class="col-md-4">
+        <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+            <div class="card my-card shadow">
+                <div class="card-body text-center">
+                    <h4>Users for January</h4>
+                    <h3 id="jancount"></h3>
+                </div>
+            </div>
+        </a>
+    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+    
+  <div id="hiddenbox-labels" style="display: none;">
+    {% for result in payments %}{{result.date|date:"b"}}+{% endfor %}
+  </div>
+   
+  <script>
+    const title =  document.getElementById('hiddenbox-labels').innerText;
+    const myLabelArray = title.split("+");
+    console.log(myLabelArray);
+   
+    var Jan = 0;
+    var Feb = 0;
+    var Mar = 0;
+    var Apr = 0;
+    var May = 0;
+    var Jun = 0;
+    var Jul = 0;
+    var Aug = 0;
+    var Sep = 0;
+    var Oct = 0;
+    var Nov = 0;
+    var Dec = 0;
+    for (let i = 0; i < myLabelArray.length ; i++) {
+      if (myLabelArray[i].includes("dec"))
+            console.log(Dec++);
+      else if (myLabelArray[i].includes("nov"))
+            console.log(Nov++);
+      else if (myLabelArray[i].includes("oct"))
+            console.log(Oct++);
+      else if (myLabelArray[i].includes("sep"))
+            console.log(Sep++);
+      else if (myLabelArray[i].includes("aug"))
+            console.log(Aug++);
+      else if (myLabelArray[i].includes("jul"))
+            console.log(Jul++);
+      else if (myLabelArray[i].includes("jun"))
+            console.log(Jun++);
+      else if (myLabelArray[i].includes("may"))
+            console.log(May++);
+      else if (myLabelArray[i].includes("apr"))
+            console.log(Apr++);
+      else if (myLabelArray[i].includes("mar"))
+            console.log(Mar++);
+      else if (myLabelArray[i].includes("feb"))
+            console.log(Feb++);
+      else if (myLabelArray[i].includes("Jan"))
+            console.log(Jan++);
+    }
+    const userCount =  document.getElementById('usercount');
+    const novCount =  document.getElementById('novcount');
+    const octCount =  document.getElementById('octcount');
+    const sepCount =  document.getElementById('sepcount');
+    const augCount =  document.getElementById('augcount');
+    const julCount =  document.getElementById('julcount');
+    const junCount =  document.getElementById('juncount');
+    const mayCount =  document.getElementById('maycount');
+    const aprCount =  document.getElementById('aprcount');
+    const marCount =  document.getElementById('marcount');
+    const febCount =  document.getElementById('febcount');
+    const janCount =  document.getElementById('jancount');
+    userCount.innerHTML = Dec;
+    novCount.innerHTML = Nov;
+    octCount.innerHTML = Oct;
+    sepCount.innerHTML = Sep;
+    augCount.innerHTML = Aug;
+    julCount.innerHTML = Jul;
+    junCount.innerHTML = Jun;
+    mayCount.innerHTML = May;
+    aprCount.innerHTML = Apr;
+    marCount.innerHTML = Mar;
+    febCount.innerHTML = Feb;
+    janCount.innerHTML = Jan;
+    
+  </script>
+  
+   
+          
+      
+
+  <!-- Scripts -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+  
+  <script>
+    setTimeout(function(){
+      if ($('#msg').length > 0) {
+        $('#msg').remove();
+      }
+    }, 3000)
+  </script> 
+</body>
+</html>

@@ -1,0 +1,276 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+
+    <title>Isabuhay - Chat Room</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<!--
+
+TemplateMo 570 Chain App Dev
+
+https://templatemo.com/tm-570-chain-app-dev
+
+-->
+
+     <!-- Additional CSS Files -->
+     <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+     <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+ 
+<style>
+  
+  .chatbox {
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  
+  .darker {
+    color: white; 
+    background-color: #00abf0;
+  }
+  
+  .time-left {
+    float: left;
+    color: white; 
+    font-size: 12px;
+  }
+
+  .xmark {
+    float: right;
+    color: white;
+  }
+  
+  .scroll-bg{
+    padding: 20px;
+    border-radius: 50px;
+    margin: 0;
+  }
+  
+  .scroll-div{
+    height: 400px;
+    overflow: hidden;
+    overflow-y: scroll;
+  }
+
+  h2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+</head>
+<body>
+
+  
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+ <!-- ***** Header Area Start ***** -->
+ <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#" class="logo">
+                <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAllCBCTestResult' %}">Reports</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+              <li class="scroll-to-section"><a href="{% url 'PromoOptions' 'pay' %}">Pay</a></li>
+              {% if user.is_admin == True %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAdminPage' %}">Admin</a></li>
+              {% endif %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+              <li class="scroll-to-section"><a href="#" class="active">Messages</a></li>
+              <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+            </ul>               
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div id="All CBC" class="services section">
+    <div class="container">
+      {% include 'NotificationMessages.html' %}
+            <div class="row">
+              <div class="col-lg-8 offset-lg-2">
+                <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+                  <h4>Isabuhay <em>ChatBox</em></h4>
+                  <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
+                  <p>Are you done with messaging?</p>
+                  <p><a href="{% url 'ShowChatRoom' %}">Go Back to Previous Page</a></p>
+                  
+                 </div>
+              </div>
+            </div>
+          </div>
+    <div class="container" style="margin-top: -50px;">
+        <div class="scroll-bg">
+          <div class="scroll-div">
+            <div id="scroll-object">
+        
+            </div>
+          </div>
+        </div>
+        <div>
+          <style>
+          input[type=text] {
+          width: 100%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          display: inline-block;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+          }
+      
+          #btn {
+          width: 100%;
+          background-image: linear-gradient(to right, rgb(88,110,236), rgb(43,217,252));
+          color: white;
+          padding: 14px 20px;
+          margin: 8px 0;
+          display: inline;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          }
+
+          textarea {
+              -webkit-box-sizing: border-box;
+              -moz-box-sizing: border-box;
+              box-sizing: border-box;
+
+              width: 100%;
+          }
+      
+          </style>
+      
+          <form method="POST" id="post-form">
+              {% csrf_token %}
+              <textarea name="message" id="message" rows="2" form="post-form" placeholder="Enter Message Here..." required></textarea>
+              <input id="btn" type="submit" value="Send">
+          </form>
+      </div>
+      
+      </div>
+    </div>
+  </div>
+
+
+  
+
+  <!-- Scripts -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+
+  
+  <script>
+    setTimeout(function(){
+      if ($('.alert').length > 0) {
+        $('.alert').remove();
+      }
+    }, 3000)
+    
+    $(document).ready(function(){
+    
+    setInterval(function(){
+        $.ajax({
+            type: 'GET',
+            url : "/get-messages/{{room_details.id}}",
+            success: function(response){
+                console.log(response);
+                $("#scroll-object").empty();
+                for (var key in response.messages)
+                {
+                  if(response.username == response.messages[key].user__username){
+                    if(response.messages[key].read)
+                      var temp="<div class='chatbox darker'><a href=\"{% url 'DeleteMessage' id=1 %}\"><i class=\"fa-solid fa-xmark xmark\"></i></a><b>".replace(/1/, response.messages[key].id) +response.messages[key].user__username+"</b><p style=\"color: white; font-size: 16px; white-space: normal; word-break: break-all;\">"+response.messages[key].value.replace(/(?:\r\n|\r|\n)/g, '<br>') +"</p><span class='time-left'>"+response.messages[key].date.replace(/T|Z/g,' ')+"</span><br><i class=\"fa-solid fa-eye\"></i></div>" ;
+                    else  
+                    
+                      var temp="<div class='chatbox darker'><a href=\"{% url 'DeleteMessage' id=1 %}\"><i class=\"fa-solid fa-xmark xmark\"></i></a><b>".replace(/1/, response.messages[key].id) +response.messages[key].user__username+"</b><p style=\"color: white; font-size: 16px; white-space: normal; word-break: break-all;\">"+response.messages[key].value.replace(/(?:\r\n|\r|\n)/g, '<br>') +"</p><span class='time-left'>"+response.messages[key].date.replace(/T|Z/g,' ')+"</span><br><i class=\"fa-sharp fa-solid fa-eye-slash\"></i></div>";
+                  }
+                  else{
+                    if(response.messages[key].read)
+                      var temp="<div class='chatbox darker'><b>"+response.messages[key].user__username+"</b><p style=\"color: white; font-size: 16px; white-space: normal; word-break: break-all;\">"+response.messages[key].value.replace(/(?:\r\n|\r|\n)/g, '<br>') +"</p><span class='time-left'>"+response.messages[key].date.replace(/T|Z/g,' ') +"</span><br><i class=\"fa-solid fa-eye\"></i></div>" ;
+                    else  
+                    
+                      var temp="<div class='chatbox darker'><b>"+response.messages[key].user__username+"</b><p style=\"color: white; font-size: 16px; white-space: normal; word-break: break-all;\">"+response.messages[key].value.replace(/(?:\r\n|\r|\n)/g, '<br>') +"</p><span class='time-left'>"+response.messages[key].date.replace(/T|Z/g,' ') +"</span><br><i class=\"fa-sharp fa-solid fa-eye-slash\"></i></div>";
+                  }
+                  
+                    
+                    $("#scroll-object").append(temp);
+                }
+            },
+            error: function(response){
+                alert('Something went wrong with getting the messages!')
+            }
+        });
+    },1000);
+    })
+    
+  $(document).on('submit','#post-form',function(e){
+    e.preventDefault();
+
+    $.ajax({
+      type:'POST',
+      url:'/send-message',
+      data:{
+          room_id: '{{room_details.id}}',
+          message:$('#message').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      error: function(response){
+          alert('Something went wrong in the sending process!')
+      }
+    });
+    document.getElementById('message').value = ''
+  });
+</script>
+
+</body>
+</html>

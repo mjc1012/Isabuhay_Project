@@ -1,0 +1,452 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>Isabuhay - Reports</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!--
+
+TemplateMo 570 Chain App Dev
+
+https://templatemo.com/tm-570-chain-app-dev
+
+-->
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+      <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+  
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <nav class="main-nav">
+              <!-- ***** Logo Start ***** -->
+               <a href="#" class="logo">
+                <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev" w>
+              </a>
+              <!-- ***** Logo End ***** -->
+              <!-- ***** Menu Start ***** -->
+              <ul class="nav">
+                <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+                <li class="scroll-to-section"><a href="{% url 'DisplayAllCBCTestResult' %}">Reports</a></li>
+                <li class="scroll-to-section"><a href="#" class="active">Analytics</a></li>
+                <li class="scroll-to-section"><a href="{% url 'PromoOptions' 'pay' %}">Pay</a></li>
+                {% if user.is_admin == True %}
+                <li class="scroll-to-section"><a href="{% url 'DisplayAdminPage' %}">Admin</a></li>
+                {% endif %}
+                <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+                <li class="scroll-to-section"><a href="{% url 'ShowChatRoom' %}">Messages</a></li>
+                <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+              </ul>         
+              <a class='menu-trigger'>
+                  <span>Menu</span>
+              </a>
+              <!-- ***** Menu End ***** -->
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+  
+  
+    <div id="All CBC" class="services section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+              <h4>Analytics</h4>
+              <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
+             </div>
+          </div>
+        </div>
+      </div>
+
+    <div id="hiddens">
+      <div id="hiddenbox-labels" style = "display: none;">
+        {% for result in object_list|slice:":10" %}
+          {{result.dateRequested|truncatechars:14}}
+        {% endfor %}
+      </div><div id="hiddenbox-wbc" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.whiteBloodCells}}+{% endfor %}
+      </div><div id="hiddenbox-rbc" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.redBloodCells}}+{% endfor %}
+      </div><div id="hiddenbox-hemo" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.hemoglobin}}+{% endfor %}
+      </div><div id="hiddenbox-hema" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.hematocrit}}+{% endfor %}
+      </div><div id="hiddenbox-mcv" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.meanCorpuscularVolume}}+{% endfor %}
+      </div><div id="hiddenbox-mch" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.meanCorpuscularHb}}+{% endfor %}
+      </div><div id="hiddenbox-mchc" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.meanCorpuscularHbConc}}+{% endfor %}
+      </div><div id="hiddenbox-rdw" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.rbcDistributionWidth}}+{% endfor %}
+      </div><div id="hiddenbox-ptlt" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.plateletCount}}+{% endfor %}
+      </div><div id="hiddenbox-sgmntrs" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.segmenters}}+{% endfor %}
+      </div><div id="hiddenbox-lymph" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.lymphocytes}}+{% endfor %}
+      </div><div id="hiddenbox-mono" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.monocytes}}+{% endfor %}
+      </div><div id="hiddenbox-eos" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.eosinophils}}+{% endfor %}
+      </div><div id="hiddenbox-baso" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.basophils}}+{% endfor %}
+      </div><div id="hiddenbox-bands" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.bands}}+{% endfor %}
+      </div><div id="hiddenbox-AS" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.absoluteSeg}}+{% endfor %}
+      </div><div id="hiddenbox-ALC" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.absoluteLymphocyteCount}}+{% endfor %}
+      </div><div id="hiddenbox-AMC" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.absoluteMonocyteCount}}+{% endfor %}
+      </div><div id="hiddenbox-AEC" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.absoluteEosinophilCount}}+{% endfor %}
+      </div><div id="hiddenbox-ABsC" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.absoluteBasophilCount}}+{% endfor %}
+      </div><div id="hiddenbox-ABnC" style = "display: none;">
+        {% for result in object_list|slice:":10" %}{{result.absoluteBandCount}}+{% endfor %}
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-top: -30px;">
+      <div style= "width: 80%;">
+        <canvas id = "myGeneralChart"></canvas>
+        <canvas id = "myDiffRelativeChart"></canvas>
+        <canvas id = "myDiffAbsoluteChart"></canvas>
+      </div>
+    </div>
+
+
+<script>
+  const title =  document.getElementById('hiddenbox-labels').innerText;
+  const wbc = document.getElementById('hiddenbox-wbc').innerText;
+  const rbc = document.getElementById('hiddenbox-rbc').innerText;
+  const hemo = document.getElementById('hiddenbox-hemo').innerText;
+  const hema = document.getElementById('hiddenbox-hema').innerText;
+  const mcv = document.getElementById('hiddenbox-mcv').innerText;
+  const mch = document.getElementById('hiddenbox-mch').innerText;
+  const mchc = document.getElementById('hiddenbox-mchc').innerText;
+  const rdw = document.getElementById('hiddenbox-rdw').innerText;
+  const ptlt = document.getElementById('hiddenbox-ptlt').innerText;
+  const sgmntrs = document.getElementById('hiddenbox-sgmntrs').innerText;
+  const lymph = document.getElementById('hiddenbox-lymph').innerText;
+  const mono = document.getElementById('hiddenbox-mono').innerText;
+  const eos = document.getElementById('hiddenbox-eos').innerText;
+  const baso = document.getElementById('hiddenbox-baso').innerText;
+  const bands = document.getElementById('hiddenbox-bands').innerText;
+  const AS = document.getElementById('hiddenbox-AS').innerText;
+  const ALC = document.getElementById('hiddenbox-ALC').innerText;
+  const AMC = document.getElementById('hiddenbox-AMC').innerText;
+  const AEC = document.getElementById('hiddenbox-AEC').innerText;
+  const ABsC = document.getElementById('hiddenbox-ABsC').innerText;
+  const ABnC = document.getElementById('hiddenbox-ABnC').innerText;
+  const myLabelArray = title.split("…");
+  const myWBCArray = wbc.split(/[?:\n,+]+/);
+  const myRBCArray = rbc.split(/[?:\n,+]+/);
+  const myHemoArray = hemo.split(/[?:\n,+]+/);
+  const myHemaArray = hema.split(/[?:\n,+]+/);
+  const myMCVArray = mcv.split(/[?:\n,+]+/);
+  const myMCHArray = mch.split(/[?:\n,+]+/);
+  const myMCHCArray = mchc.split(/[?:\n,+]+/);
+  const myRDWArray = rdw.split(/[?:\n,+]+/);
+  const myPtltArray = ptlt.split(/[?:\n,+]+/);
+  const mySgmtrsArray = sgmntrs.split(/[?:\n,+]+/);
+  const myLymphArray = lymph.split(/[?:\n,+]+/);
+  const myMonoArray = mono.split(/[?:\n,+]+/);
+  const myEosArray = eos.split(/[?:\n,+]+/);
+  const myBasoArray = baso.split(/[?:\n,+]+/);
+  const myBandsArray = bands.split(/[?:\n,+]+/);
+  const myASArray = AS.split(/[?:\n,+]+/);
+  const myALCArray = ALC.split(/[?:\n,+]+/);
+  const myAMCArray = AMC.split(/[?:\n,+]+/);
+  const myAECArray = AEC.split(/[?:\n,+]+/);
+  const myABsCArray = ABsC.split(/[?:\n,+]+/);
+  const myABnCArray = ABnC.split(/[?:\n,+]+/);
+  myLabelArray.pop();
+  const BlankLabelArray = [' '];
+  const ZeroLabelArray = [0]
+  
+  const ctx1 = document.querySelector('#myGeneralChart').getContext('2d')
+  const myGeneralChart = new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: [...BlankLabelArray,...myLabelArray
+        // 'January',
+        // 'February',
+        // 'March',
+        // 'April',
+        // 'May',
+        // 'June',
+      ],
+      datasets: [{
+          label: 'White Blood Cells',
+          backgroundColor: 'rgb(172,172,172)',
+          borderColor: 'rgb(172,172,172)',
+          data: [...myWBCArray.map(Number)],
+        },{
+          label: 'Red Blood Cells',
+          backgroundColor: 'rgb(255,99,132)',
+          borderColor: 'rgb(255,99,132)',
+          data: [...myRBCArray.map(Number)],
+        },{
+          label: 'Hemoglobin',
+          backgroundColor: 'rgb(51,212,104)',
+          borderColor: 'rgb(51,212,104)',
+          data: [...myHemoArray.map(Number)],
+        },{
+          label: 'Hematocrit',
+          backgroundColor: 'rgb(236,229,132)',
+          borderColor: 'rgb(236,229,132)',
+          data: [...myHemaArray.map(Number)],
+        },{
+          label: 'Mean Corpuscular Volume',
+          backgroundColor: 'rgb(170,170,243)',
+          borderColor: 'rgb(170,170,243)',
+          data: [...myMCVArray.map(Number)],
+        },{
+          label: 'Mean Corpuscular Hb',
+          backgroundColor: 'rgb(113,113,246)',
+          borderColor: 'rgb(113,113,246)',
+          data: [...myMCHArray.map(Number)],
+        },{
+          label: 'Mean Corpuscular Hb. Conc.',
+          backgroundColor: 'rgb(17,17,232)',
+          borderColor: 'rgb(17,17,232)',
+          data: [...myMCHCArray.map(Number)],
+        },{
+          label: 'RBC Distribution Width',
+          backgroundColor: 'rgb(242,175,226)',
+          borderColor: 'rgb(242,175,226)',
+          data: [...myRDWArray.map(Number)],
+        },{
+          label: 'Platelet Counts',
+          backgroundColor: 'rgb(151,75,228)',
+          borderColor: 'rgb(151,75,228)',
+          data: [...myPtltArray.map(Number)],
+        },
+      ]
+      },
+    options: {
+      plugins:{
+        legend:{
+          position: 'right'
+        },
+        title:{
+          display: true,
+          text: 'General',
+          font: {
+            size:20
+          }
+        }
+      }
+    }
+    
+  });
+
+  const ctx2 = document.querySelector('#myDiffRelativeChart').getContext('2d')
+  const myDiffRelativeChart = new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: [...BlankLabelArray,...myLabelArray
+        // 'January',
+        // 'February',
+        // 'March',
+        // 'April',
+        // 'May',
+        // 'June',
+      ],
+      datasets: [{
+          label: 'Segmenters / Neutrophils',
+          backgroundColor: 'rgb(126,51,212)',
+          borderColor: 'rgb(126,51,212)',
+          data: [...mySgmtrsArray.map(Number)],
+        },{
+          label: 'Lymphocytes',
+          backgroundColor: 'rgb(51,185,212)',
+          borderColor: 'rgb(51,185,212)',
+          data: [...myLymphArray.map(Number)],
+        },{
+          label: 'Monocytes',
+          backgroundColor: 'rgb(137,100,212)',
+          borderColor: 'rgb(136,100,212)',
+          data: [...myMonoArray.map(Number)],
+        },{
+          label: 'Eosinophils',
+          backgroundColor: 'rgb(171,84,229)',
+          borderColor: 'rgb(171,84,229)',
+          data: [...myEosArray.map(Number)],
+        },{
+          label: 'Basophils',
+          backgroundColor: 'rgb(255,18,137)',
+          borderColor: 'rgb(255,18,137)',
+          data: [...myBasoArray.map(Number)],
+        },{
+          label: 'Bands',
+          backgroundColor: 'rgb(255,0,51)',
+          borderColor: 'rgb(255,0,51)',
+          data: [...myBandsArray.map(Number)],
+        },
+      ]
+      },
+    options: {
+      plugins:{
+        legend:{
+          position: 'right'
+        },
+        title:{
+          display: true,
+          text: 'Diff. Count (Relative)',
+          font: {
+            size:20
+          }
+        }
+      }
+    }
+    
+  });
+
+
+  const ctx3 = document.querySelector('#myDiffAbsoluteChart').getContext('2d')
+  const myDiffAbsoluteChart = new Chart(ctx3, {
+    type: 'line',
+    data: {
+      labels: [...BlankLabelArray,...myLabelArray
+        // 'January',
+        // 'February',
+        // 'March',
+        // 'April',
+        // 'May',
+        // 'June',
+      ],
+      datasets: [{
+          label: 'Absolute Seg/Neutro Count',
+          backgroundColor: 'rgb(126,51,212)',
+          borderColor: 'rgb(126,51,212)',
+          data: [...myASArray.map(Number)],
+        },{
+          label: 'Absolute Lymphocyte Count',
+          backgroundColor: 'rgb(51,185,212)',
+          borderColor: 'rgb(51,185,212)',
+          data: [...myALCArray.map(Number)],
+        },{
+          label: 'Absolute Monocyte Count',
+          backgroundColor: 'rgb(137,100,212)',
+          borderColor: 'rgb(136,100,212)',
+          data: [...myAMCArray.map(Number)],
+        },{
+          label: 'Absolute Eosinophil Count',
+          backgroundColor: 'rgb(171,84,229)',
+          borderColor: 'rgb(171,84,229)',
+          data: [...myAECArray.map(Number)],
+        },{
+          label: 'Absolute Basophil Count',
+          backgroundColor: 'rgb(255,18,137)',
+          borderColor: 'rgb(255,18,137)',
+          data: [...myABsCArray.map(Number)],
+        },{
+          label: 'Absolute Band Count',
+          backgroundColor: 'rgb(255,0,51)',
+          borderColor: 'rgb(255,0,51)',
+          data: [...myABnCArray.map(Number)],
+        },
+      ]
+      },
+    options: {
+      plugins:{
+        legend:{
+          position: 'right'
+        },
+        title:{
+          display: true,
+          text: 'Diff. Count (Absolute)',
+          font: {
+            size:20
+          }
+        }
+      },
+    
+      // scales: {
+      //   y:{
+      //     ticks: {
+      //       callback:function(value,index){
+      //         return index%2 === 0 ? this.getLabelForValue(value) : ' ' ;
+      //       }
+      //     }
+      //   }
+
+      // }
+    }
+    
+  });
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+  <!-- Scripts -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+  
+  <script>
+    setTimeout(function(){
+      if ($('#msg').length > 0) {
+        $('#msg').remove();
+      }
+    }, 3000)
+  </script> 
+</body>
+</html>

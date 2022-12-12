@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>Isabuhay - Capture Image</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!--
+TemplateMo 570 Chain App Dev
+https://templatemo.com/tm-570-chain-app-dev
+-->
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+    <!-- Buttonsss -->
+
+    <style>
+      button, #button{
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+        border-radius: 25px;
+        padding: 10px;
+        width: 125px;
+        color: white;
+        border: none;
+        background-image: linear-gradient(to right, rgb(88,110,236), rgb(43,217,252));
+      }
+    </style>
+
+  </head>
+
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#" class="logo">
+              <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAllCBCTestResult' %}">Reports</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+              <li class="scroll-to-section"><a href="{% url 'PromoOptions' 'pay' %}">Pay</a></li>
+              {% if user.is_admin == True %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAdminPage' %}">Admin</a></li>
+              {% endif %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+              <li class="scroll-to-section"><a href="{% url 'ShowChatRoom' %}">Messages</a></li>
+              <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+            </ul>         
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+  <div id="services" class="services section">
+    
+    <div class="container">
+      {% include 'NotificationMessages.html' %}
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading show-up header-text  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h4>Capture <em>Image</em></h4>
+            <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
+            <p><a href="{% url 'AddingCBCTestResultOptions' %}">Go Back To Adding Options</a></p>
+            <p>Want to use your phone to take the picture? Click <a href="https://www.youtube.com/watch?v=J7iXt9fLI2U&t=222s" target="_blank">Here</a> To Know How</p>
+            <br>
+            <h5>Choose Camera</h5>
+            <select id="select">
+              <option></option>
+            </select>
+            <br>
+            <br>
+            <div id="button" style="cursor: pointer;">Open camera</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contentarea">
+      <div class="Input">
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
+                <div style="height: 480px; width: 640; background-color: grey; border-radius: 25px; position: relative; top: auto;">
+                    <video id="video" style="background-color: #00abf0; width: 100%; height: 100%; border-radius: 25px;" autoplay>Video stream not available.</video>
+                </div>
+                <br>
+                <button id="takepicture">Take photo</button>
+              
+        
+              </div>
+              <div class="col-lg-6 wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                <div>
+                  <canvas id="canvas" width="640" height="480" style="background-color: #00abf0; border-radius: 25px;"></canvas>
+                </div>
+                <br>
+                <form method="POST" action="." id="msform" enctype='multipart/form-data'>
+                  {% csrf_token %}
+                  <input id="webimg" name="src" type="text" style="display: none;">
+                <button type="submit" class="button" id="submit">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+ <!-- Scripts -->
+ <script src="{% static 'jquery/jquery.js' %}"></script>
+ <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+ <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+ <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+ <script src="{% static 'assets/js/animation.js' %}"></script>
+ <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+ <script src="{% static 'assets/js/popup.js' %}"></script>
+ <script src="{% static 'assets/js/custom.js' %}"></script>
+
+  <script>
+    setTimeout(function(){
+      if ($('.alert').length > 0) {
+        $('.alert').remove();
+      }
+    }, 3000)
+
+    function preventBack() {
+        window.history.forward(); 
+    }
+      
+    setTimeout("preventBack()", 0);
+      
+    window.onunload = function () { null };
+
+    var isSubmitting = false
+    $(document).ready(function () {
+        $('#msform').submit(function(e){
+            isSubmitting = true
+
+            if (isSubmitting &&  $('#webimg').val() == ""){
+              e.preventDefault(); //Prevents the form to be sent
+              alert('Please take a picture.')
+            }
+        })
+
+        
+
+        $(window).on('beforeunload', function() {
+            if (!isSubmitting &&  $('#webimg').val() != ""){
+                return 'You have unsaved changes which will not be saved.'
+            }
+        });
+    })
+     
+    const video = document.getElementById('video');
+    const canvas = document.querySelector("#canvas");
+  const button = document.getElementById('button');
+  const select = document.getElementById('select');
+  let currentStream;
+
+  function stopMediaTracks(stream) {
+    stream.getTracks().forEach(track => {
+      track.stop();
+    });
+  }
+
+  function gotDevices(mediaDevices) {
+    select.innerHTML = '';
+    select.appendChild(document.createElement('option'));
+    let count = 1;
+    mediaDevices.forEach(mediaDevice => {
+      if (mediaDevice.kind === 'videoinput') {
+        const option = document.createElement('option');
+        option.value = mediaDevice.deviceId;
+        const label = mediaDevice.label || `Camera ${count++}`;
+        const textNode = document.createTextNode(label);
+        option.appendChild(textNode);
+        select.appendChild(option);
+      }
+    });
+  }
+
+  button.addEventListener('click', event => {
+    if (typeof currentStream !== 'undefined') {
+      stopMediaTracks(currentStream);
+    }
+    const videoConstraints = {};
+    if (select.value !== '') {
+      videoConstraints.deviceId = { exact: select.value };
+      
+    const constraints = {
+      video: videoConstraints,
+      audio: false
+    };
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then(stream => {
+        currentStream = stream;
+        video.srcObject = stream;
+        return navigator.mediaDevices.enumerateDevices();
+      })
+      .then(gotDevices)
+      .catch(error => {
+        console.error(error);
+      });
+    }
+  });
+
+  var context = canvas.getContext('2d');
+  
+  document.getElementById('takepicture').addEventListener('click', () => {
+    context.drawImage(video, 0, 0, 640, 480);
+    var data = canvas.toDataURL('image/png');
+    document.getElementById('webimg').value = data;
+    photo.setAttribute('src', data);
+
+  });
+
+  navigator.mediaDevices.enumerateDevices().then(gotDevices);
+  </script> 
+</body>
+</html>

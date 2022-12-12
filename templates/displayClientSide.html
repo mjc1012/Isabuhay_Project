@@ -1,0 +1,140 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="{% static 'css/fonts.css' %}" rel="stylesheet">
+
+    <title>Isabuhay - Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!--
+
+TemplateMo 570 Chain App Dev
+
+https://templatemo.com/tm-570-chain-app-dev
+
+-->
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+  </head>
+
+  <body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+      <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+  
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <nav class="main-nav">
+              <!-- ***** Logo Start ***** -->
+               <a href="#" class="logo">
+                <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev" w>
+              </a>
+              <!-- ***** Logo End ***** -->
+              <!-- ***** Menu Start ***** -->
+              <ul class="nav">
+                <li class="scroll-to-section"><a href="#" class="active">Client Page</a></li>
+                <li class="scroll-to-section"><a href="{% url 'DisplayAllCBCTestResult' %}">Reports</a></li>
+                <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+                <li class="scroll-to-section"><a href="{% url 'PromoOptions' 'pay' %}">Pay</a></li>
+                {% if user.is_admin == True %}
+                <li class="scroll-to-section"><a href="{% url 'DisplayAdminPage' %}">Admin</a></li>
+                {% endif %}
+                <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+                <li class="scroll-to-section"><a href="{% url 'ShowChatRoom' %}">Messages</a></li>
+                <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+              </ul>        
+              <a class='menu-trigger'>
+                  <span>Menu</span>
+              </a>
+              <!-- ***** Menu End ***** -->
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+  
+  
+    <div id="All CBC" class="services section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 offset-lg-2">
+            <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+              <h4>Hello <em>{{user.firstname}}</em>,</h4>
+              <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
+             </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
+            <img src="{% static 'assets/images/document.jpg' %}" height="100%" style="border-top-left-radius: 50px; border-bottom-left-radius: 50px;">
+          </div>  
+          <div class="col-lg-8 wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s" style="height: 100%;">
+            <div style="background-color: white; box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.1); border-top-right-radius: 50px; border-bottom-right-radius: 50px; padding: 25px; height: 100%;">
+              <h4>What is IsaBuhay?</h4>
+              <br>
+              <p style="text-align: justify;">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dignissim ac sem nec luctus. 
+                Duis interdum ultricies lectus sed hendrerit. Integer sollicitudin purus in pharetra fermentum. 
+                Morbi nec tempus sem. In leo lacus, laoreet eget nisi fermentum, fermentum consectetur urna. 
+                Proin venenatis at nisi nec bibendum. Donec consectetur fringilla nulla, sit amet pellentesque 
+                sem faucibus in. Praesent id lectus nulla. Sed cursus tincidunt finibus. Maecenas quis lacus 
+                aliquet, varius augue ac, fringilla lorem. Aliquam viverra, metus vel aliquam lacinia, ex metus 
+                fringilla dolor, ac tincidunt odio lectus sit amet risus. Morbi fringilla erat varius, cursus 
+                elit sit amet, varius ante. Vestibulum viverra ultricies nisl, sit amet vehicula urna dictum ac.
+              </p>
+              <br>
+              <p style="text-align: justify;">
+                Integer tellus est, scelerisque id molestie a, dictum dapibus libero. Cras leo enim, tempor quis 
+                aliquam non, posuere sit amet nunc. Mauris leo est, feugiat et posuere sed, luctus quis lorem. 
+                Nulla consequat ultricies augue vel tempus.
+              </p>
+            </div>
+          </div> 
+        </div>          
+      </div>
+    </div>
+
+  <!-- Scripts -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+</body>
+</html>

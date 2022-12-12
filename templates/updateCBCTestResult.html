@@ -1,0 +1,312 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="{% static 'css/fonts.css' %}" rel="stylesheet">
+
+    <title>Isabuhay - Update CBC Test Result</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!--
+TemplateMo 570 Chain App Dev
+https://templatemo.com/tm-570-chain-app-dev
+-->
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/jeff_custom.css' %}">
+
+    <!-- Buttonsss -->
+
+    <style>
+      label {
+      float: left;
+      }
+      
+      td { width: 33%; }
+      
+      button{
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, 0);
+        border-radius: 25px;
+        padding: 10px;
+        width: 125px;
+        color: white;
+        border: none;
+        background-image: linear-gradient(to right, rgb(88,110,236), rgb(43,217,252));
+      }
+    </style>
+
+  </head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#" class="logo">
+              <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAllCBCTestResult' %}">Reports</a></li>
+              <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+              <li class="scroll-to-section"><a href="{% url 'PromoOptions' 'pay' %}">Pay</a></li>
+              {% if user.is_admin == True %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAdminPage' %}">Admin</a></li>
+              {% endif %}
+              <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+              <li class="scroll-to-section"><a href="{% url 'ShowChatRoom' %}">Messages</a></li>
+              <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+            </ul>            
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  
+
+  <div id="about" class="about-us section">
+    <div class="container">
+      {% include 'NotificationMessages.html' %}
+      <div class="row">
+        <div class="col-lg-6  wow slideInLeft" style="margin-top: 20px;">
+
+          <div class="section-heading" data-wow-duration="1s" data-wow-delay="0.5s" style="text-align: center;">
+            <h4>Update <em>CBC Test Result</em></h4>
+                <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
+           </div>
+          
+           <form id="msform" action="{% url 'UpdateCBCTestResult' object.id %}" method="POST">
+            {% csrf_token %}
+            <fieldset>
+                <h2 class="fs-title">Extracted Data</h2>
+                <h3 class="fs-subtitle">Change neccesary fields</h3>
+                <table style="width: 100%;">
+                  <tr><td colspan="3">
+                    <label>Source:</label>
+                    <input type="text"  name="source" required value="{{object.source}}">
+                  </td></tr>
+                  <tr><td colspan="3">
+                    <label>Lab Number:</label>
+                    <input type="number"  name="labNumber" required value="{{object.labNumber}}">
+                  </td></tr>
+                <tr><td colspan="3">
+                  <label>PID Number:</label>
+                  <input type="text"  name="pid" required  value="{{object.pid}}">
+                </td></tr>
+                <tr><td colspan="3">
+                  <label>Date Requested in 24-Hour Time Format (MM-DD-YYYY HH:MM):</label>
+                  <input type="text"  name="dateRequested" pattern="(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])-[0-9]{4} ([0-1]{1}[0-9]{1}|20|21|22|23):[0-5]{1}[0-9]{1}" required value="{{dateRequestedStr}}">
+                </td></tr>
+              <tr><td colspan="3">
+                <label>Date Received in 24-Hour Time Format (MM-DD-YYYY HH:MM):</label>
+                <input type="text"  name="dateReceived" pattern="(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])-[0-9]{4} ([0-1]{1}[0-9]{1}|20|21|22|23):[0-5]{1}[0-9]{1}" required value="{{dateReceivedStr}}">
+              </td></tr>
+                  <tr>
+                    <td colspan="1">
+                      <label>WBC:</label>
+                          <input type="number"  name="whiteBloodCells" min=0 step="any" max="1000" required  value="{{object.whiteBloodCells}}" >
+                    </td>
+                    <td colspan="1">
+                      <label>RBC:</label>
+                          <input type="number"  name="redBloodCells" min=0 step="any" max="1000" required  value="{{object.redBloodCells}}" >
+                    </td>
+                    <td colspan="1">
+                      <label>HGB:</label>
+                        <input type="number"  name="hemoglobin" min=0 step="any" max="1000" required  value="{{object.hemoglobin}}" >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>HCT:</label>
+                      <input type="number"  name="hematocrit" min=0 step="any" max="1000" required  value="{{object.hematocrit}}" >
+                    </td>
+                    <td>
+                      <label>MCV:</label>
+                      <input type="number"  name="meanCorpuscularVolume" min=0 step="any" max="1000" required  value="{{object.meanCorpuscularVolume}}" >
+                    </td>
+                    <td>
+                      <label>MCH:</label>
+                      <input type="number"  name="meanCorpuscularHb" min=0 step="any" max="1000" required  value="{{object.meanCorpuscularHb}}" >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>MCHC:</label>
+                      <input type="number"  name="meanCorpuscularHbConc" min=0 step="any" max="1000" required  value="{{object.meanCorpuscularHbConc}}" >
+                    </td>
+                    <td>
+                      <label>RDW:</label>
+                      <input type="number"  name="rbcDistributionWidth" min=0 step="any" max="1000" required  value="{{object.rbcDistributionWidth}}" >
+                    </td>
+                    <td>
+                      <label>PLT:</label>
+                      <input type="number"  name="plateletCount" min=0 step="any" max="1000" required  value="{{object.plateletCount}}" >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>NEUT:</label>
+                      <input type="number"  name="neutrophils" min=0 step="any" max="1000" required  value="{{object.neutrophils}}" >
+                    </td>
+                    <td>
+                      <label>LYMPH:</label>
+                      <input type="number"  name="lymphocytes" min=0 step="any" max="1000" required  value="{{object.lymphocytes}}" >
+                    </td>
+                    <td>
+                      <label>MONO:</label>
+                      <input type="number"  name="monocytes" min=0 step="any" max="1000" required  value="{{object.monocytes}}" >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>EOS:</label>
+                      <input type="number"  name="eosinophils" min=0 step="any" max="1000" required  value="{{object.eosinophils}}" >
+                    </td>
+                    <td>
+                      <label>BASO:</label>
+                  <input type="number"  name="basophils" min=0 step="any" max="1000" required  value="{{object.basophils}}" >
+                    </td>
+                    <td>
+                      <label>BANDS:</label>
+                <input type="number"  name="bands" min=0 step="any" max="1000" required  value="{{object.bands}}" >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>ABS NEUT:</label>
+                      <input type="number"  name="absoluteNeutrophilsCount" min=0 step="any" max="1000" required  value="{{object.absoluteNeutrophilsCount}}" >
+                    </td>
+                    <td>
+                      <label>ABS LYMPH:</label>
+                  <input type="number"  name="absoluteLymphocyteCount" min=0 step="any" max="1000" required  value="{{object.absoluteLymphocyteCount}}" >
+                    </td>
+                    <td>
+                      <label>ABS MONO:</label>
+                      <input type="number"  name="absoluteMonocyteCount" min=0 step="any" max="1000" required  value="{{object.absoluteMonocyteCount}}" >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label>ABS EOS:</label>
+                      <input type="number"  name="absoluteEosinophilCount" min=0 step="any" max="1000" required  value="{{object.absoluteEosinophilCount}}" >
+                    </td>
+                    <td>
+                      <label>ABS BASO:</label>
+                      <input type="number"  name="absoluteBasophilCount" min=0 step="any" max="1000" required  value="{{object.absoluteBasophilCount}}" >
+                    </td>
+                    <td>
+                      <label>ABS BAND:</label>
+                      <input type="number"  name="absoluteBandCount" min=0 step="any" max="1000" required  value="{{object.absoluteBandCount}}" >      
+                    </td>
+                  </tr>
+                </table>
+                <input type="button" value="Cancel" onclick="redirectBack()" name="previous" class="action-button-previous">
+                <input type="submit" class="action-button"  onclick="submitButtonClick(event)" value="Update"/>
+            </fieldset>
+          </form>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="right-image">
+            <img src="{% static 'assets/images/about-right-dec.png' %}" alt="">
+          </div>
+        </div>
+
+        <br><br><br>
+      </div>
+    </div>
+  </div>
+  <!-- Custom Scripts -->
+
+  <!-- Scripts -->
+  <script src="{% static 'jquery/jquery.js' %}"></script>
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+  <script src="{% static 'js/jeff_custom.js' %}"></script>
+  <script src="{% static 'js/form_animation.js' %}"></script>
+
+
+  <script>
+    setTimeout(function(){
+      if ($('.alert').length > 0) {
+        $('.alert').remove();
+      }
+    }, 3000)
+    
+    function redirectBack(){
+      history.back()
+    }
+
+    
+    function submitButtonClick(event) {
+          if($('#msform').serialize() == $('#msform').data('initial-state')){
+            event.preventDefault();
+            alert("No Changes were made.");
+          }
+        } 
+
+    var isSubmitting = false
+
+    $(document).ready(function () {
+      
+      $('#msform').data('initial-state', $('#msform').serialize());
+      
+        $('#msform').submit(function(evt){
+            isSubmitting = true
+        })
+
+        $(window).on('beforeunload', function() {
+            if (!isSubmitting && $('#msform').serialize() != $('#msform').data('initial-state')){
+                return 'You have unsaved changes which will not be saved.'
+            }
+        });
+    })
+</script>
+</body>
+</html>

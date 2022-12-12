@@ -1,0 +1,54 @@
+<!-- Modal -->
+<div class="modal fade" id="deleteFileModal{{ object.id }}" tabindex="-1" aria-labelledby="deleteModalFileTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalFileTitle">
+            {% if type == 'docx' %}
+                Delete Uploaded Document 
+            {% elif type ==  'pdf' %}
+            Delete Uploaded PDF
+            {% elif type == 'image' or type == 'picture'  %}
+            Delete Uploaded Image
+            {% endif %}
+        </h5>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="text-align:justify;" >
+          <p>
+          Are you sure you want to delete this?
+          </p>
+          <p>
+            {% if type == 'docx' %}
+            If you would still like your uploaded PDF deleted, click "Delete Uploaded Document".
+            {% elif type ==  'pdf' %}
+            If you would still like your uploaded PDF deleted, click "Delete Uploaded PDF".
+            {% elif type == 'image' or type == 'picture'  %}
+            If you would still like your uploaded PDF deleted, click "Delete Uploaded Image".
+            {% endif %}
+          </p>
+        </div>
+        <div class="modal-footer">
+            {% if type == 'docx' %}
+            <form method="POST" action="{% url 'DeleteCBCTestResultDocument' object.id %}">
+            {% elif type ==  'pdf' %}
+            <form method="POST" action="{% url 'DeleteCBCTestResultPDF' object.id %}">
+            {% elif type == 'image' or type == 'picture'  %}
+            <form method="POST" action="{% url 'DeleteCBCTestResultImage' type object.id %}">
+            {% endif %}
+            {% csrf_token %}
+            {% if type == 'docx' %}
+            <input type="submit" class="btn btn-primary" value="Delete Uploaded Document">
+            {% elif type ==  'pdf' %}
+            <input type="submit" class="btn btn-primary" value="Delete Uploaded PDF">
+            {% elif type == 'image' or type == 'picture'  %}
+            <input type="submit" class="btn btn-primary" value="Delete Uploaded Image">
+            {% endif %}
+          </form>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>

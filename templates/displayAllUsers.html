@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <title>Isabuhay - Reports</title>
+    <style>
+      .all-us {
+        overflow-y: scroll;
+        height: 600px;
+      }
+      .all-us thead th {
+        position: sticky;
+        top: 0;
+      }
+      
+    </style>
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!--
+
+TemplateMo 570 Chain App Dev
+
+https://templatemo.com/tm-570-chain-app-dev
+
+-->
+
+    <!-- Additional CSS Files --><link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/templatemo-chain-app-dev.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animated.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/owl.css' %}">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/krl_custom.css' %}">
+
+  </head>
+
+  <body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+      <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+  
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <nav class="main-nav">
+              <!-- ***** Logo Start ***** -->
+               <a href="#" class="logo">
+                <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev" w>
+              </a>
+              <!-- ***** Logo End ***** -->
+              <!-- ***** Menu Start ***** -->
+              <ul class="nav">
+                    <li class="scroll-to-section"><a href="{% url 'DisplayClientSide' %}">Client Page</a></li>
+                    <li class="scroll-to-section"><a href="#" class="active">Users List</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'DisplayUsersMonthly' %}">Users Per Month</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'DisplayPaymentList' %}">Payments List</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'DisplayRevenueMonth' %}">Payments Per Month</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'DisplayAnalytics' %}">Analytics</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'DisplayAccountPage' %}">Account</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'ShowChatRoom' %}">Messages</a></li>
+                    <li class="scroll-to-section"><a href="{% url 'LogoutView' %}">Sign Out</a></li>
+              </ul>            
+              <a class='menu-trigger'>
+                  <span>Menu</span>
+              </a>
+              <!-- ***** Menu End ***** -->
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    
+    <div class="container">
+      <div class="all-usasd">
+      <div class="row" >
+        <div class="col-md-4 mt-4">
+                <div class="card-header bg-info text-white" style="margin-top:200px ;">
+                    Information
+                <div class="card-body">
+                    <marquee behavior="" direction="">
+                        <h3 class="my-4">Isabuhay Admin</h3>
+                    </marquee>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 mt-4">
+                <div class="card-header bg-info text-white " style="margin-top:200px ;">
+                    Dashboard Statistics
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a class="text-decoration-none text-dark" href="{% url 'DisplayAllUsers' %}">
+                                <div class="card my-card shadow">
+                                    <div class="card-body text-center">
+                                        <h4>Users <i class="fas fa-users"></i></h4>
+                                        <h3>{{ users_count }}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a class="text-decoration-none text-dark" href="{% url 'DisplayPaymentList' %}">
+                                <div class="card my-card shadow">
+                                    <div class="card-body text-center">
+                                        <h4>Payments <i class="fas fa-box"></i></h4>
+                                        <h3>{{ object_count }}</h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  </div>
+  
+
+    <div id="allusers" class="container">
+        <div class="all-us">
+            <div class="row">
+                <div class="col s12 m8 14 offset-m2 offset-14" style="margin-top:50px ;">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">User ID</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Date Created</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                {% for user in users %}
+                    <tr>
+                        <th scope="row">{{user.id}}</th>
+                        <td>{{user.username}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.phone_number}}</td>
+                        <td>{{user.date_created}}</td>
+                        <td>
+                            <a href={% url 'UpdateAccountPage' %}>
+                              <button class="btn btn-success">Update</button>
+                            </a>
+                            <a href={% url 'DeleteUser' user.id %}>
+                              <button class="btn btn-success">Delete</button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                  </table>
+                </div>
+            </div>
+        </div>
+  
+   
+          
+      
+
+  <!-- Scripts -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/js/owl-carousel.js' %}"></script>
+  <script src="{% static 'assets/js/animation.js' %}"></script>
+  <script src="{% static 'assets/js/imagesloaded.js' %}"></script>
+  <script src="{% static 'assets/js/popup.js' %}"></script>
+  <script src="{% static 'assets/js/custom.js' %}"></script>
+  
+  <script>
+    setTimeout(function(){
+      if ($('#msg').length > 0) {
+        $('#msg').remove();
+      }
+    }, 3000)
+  </script> 
+</body>
+</html>
