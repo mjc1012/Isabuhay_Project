@@ -968,7 +968,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
             for chunk in req.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)
-
+                    
         txt = d2t.process(filename)
 
         values = txt.split()
@@ -1175,15 +1175,21 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
             return self.redirectTemplate(self.redirect_logout_template_name)
 
         if type == 'docx':
-            docxObject = None
-            docxObject, data = self.getDocxInitialValues(id)
-            
-            if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
-                self.deleteTest(docxObject)
+            try: 
+                docxObject = None
+                docxObject, data = self.getDocxInitialValues(id)
+                
+                if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
+                    self.deleteTest(docxObject)
+                    self.sendErrorMessage(request, self.values_error_message)
+                    self.addUserUploads(user)
+                    return self.redirectTemplate(self.redirect_docx_template_name)
+            except:
+                if docxObject != None: 
+                    self.deleteTest(docxObject)
                 self.sendErrorMessage(request, self.values_error_message)
                 self.addUserUploads(user)
                 return self.redirectTemplate(self.redirect_docx_template_name)
-            
         elif type == 'pdf':
             try:
                 pdfObject = None
