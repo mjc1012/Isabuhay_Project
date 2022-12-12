@@ -1050,8 +1050,6 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         data['object'] = imgObject
         FILE_PATH = imgObject.testImage.url
 
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'static\\ocr\\vision-api.json'
-
         client = vision.ImageAnnotatorClient()
 
         with smart_open(FILE_PATH, 'rb') as image_file:
