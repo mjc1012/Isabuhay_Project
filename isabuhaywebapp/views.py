@@ -762,7 +762,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     template_name = 'CreateCBCTestResult.html'
     success_message = 'Create CBC Test Result Successful!'
 
-    def ocrModel(self, file_name, data):
+    def ocrModel(self, file_name, type, data):
         os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'static\\ocr\\vision-api.json'
 
         client = vision.ImageAnnotatorClient()
@@ -783,10 +783,89 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
                 ),
                 ignore_index=True
             )
-            
+        
         data['labNumber'] = df['description'][114]
         data['source'] = df['description'][110]
         data['pid'] = df['description'][9]
+
+        data['dateRequested'] = df['description'][18] + ' ' + df['description'][19] + ' ' + df['description'][20]
+        if "PM" in data['dateRequested']:
+            dateArr = data['dateRequested'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
+                data['dateRequested'] = data['dateRequested'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateRequested'] = finalDate
+
+        elif "AM" in data['dateRequested']:
+            data['dateRequested'] = data['dateRequested'][:-3]
+
+        data['dateReceived'] = df['description'][126] + ' ' + df['description'][127] + ' ' + df['description'][128] 
+        if "PM" in data['dateReceived']:
+            dateArr = data['dateReceived'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
+                data['dateReceived'] = data['dateReceived'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateReceived'] = finalDate
+
+        elif "AM" in data['dateReceived']:
+            data['dateReceived'] = data['dateReceived'][:-3]
+        
+        if type == 'image' or type == 'picture':
+            data['whiteBloodCells'] = df['description'][87]
+            data['redBloodCells'] = df['description'][88]
+            data['hemoglobin'] = df['description'][89]
+            data['hematocrit'] = df['description'][90]
+            data['meanCorpuscularVolume'] = df['description'][91]
+            data['meanCorpuscularHb'] = df['description'][92]
+            data['meanCorpuscularHbConc'] = df['description'][93]
+            data['rbcDistributionWidth'] = df['description'][94]
+            data['plateletCount'] = df['description'][95]
+            data['neutrophils'] = df['description'][96]
+            data['lymphocytes'] = df['description'][97]
+            data['monocytes'] = df['description'][98]
+            data['eosinophils'] = df['description'][99]
+            data['basophils'] = df['description'][100]
+            data['bands'] = df['description'][101]
+            data['absoluteNeutrophilsCount'] = df['description'][102]
+            data['absoluteLymphocyteCount'] = df['description'][103]
+            data['absoluteMonocyteCount'] = df['description'][104]
+            data['absoluteEosinophilCount'] = df['description'][105]
+            data['absoluteBasophilCount'] = df['description'][106]
+            data['absoluteBandCount'] = df['description'][107]
+        
+        elif type == 'pdf':
+            data['whiteBloodCells'] = df['description'][69]
+            data['redBloodCells'] = df['description'][70]
+            data['hemoglobin'] = df['description'][71]
+            data['hematocrit'] = df['description'][72]
+            data['meanCorpuscularVolume'] = df['description'][73]
+            data['meanCorpuscularHb'] = df['description'][74]
+            data['meanCorpuscularHbConc'] = df['description'][75]
+            data['rbcDistributionWidth'] = df['description'][76]
+            data['plateletCount'] = df['description'][77]
+            data['neutrophils'] = df['description'][78]
+            data['lymphocytes'] = df['description'][79]
+            data['monocytes'] = df['description'][80]
+            data['eosinophils'] = df['description'][81]
+            data['basophils'] = df['description'][82]
+            data['bands'] = df['description'][83]
+            data['absoluteNeutrophilsCount'] = df['description'][87]
+            data['absoluteLymphocyteCount'] = df['description'][90]
+            data['absoluteMonocyteCount'] = df['description'][95]
+            data['absoluteEosinophilCount'] = df['description'][99]
+            data['absoluteBasophilCount'] = df['description'][103]
+            data['absoluteBandCount'] = df['description'][107]
+
         return data
 
     def getUser(self, request):
@@ -1014,7 +1093,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     def getPDF(self, id):
         return self.pdf_model.objects.get(id=id)
     
-    def getPDFInitialValues(self, id):
+    def getPDFInitialValues(self, type, id):
         data = {}
         pdfObject = self.getPDF(id)
         data['object'] = pdfObject
@@ -1033,7 +1112,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         newfilename = 'newpdf.jpg'
         pages[0].save(newfilename, 'JPEG')
 
-        data = self.ocrModel(newfilename, data)
+        data = self.ocrModel(newfilename, type, data)
         self.removeFile(filename)
         
         return pdfObject, data
@@ -1041,7 +1120,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     def getImage(self, id):
         return self.image_model.objects.get(id=id)
 
-    def getImageInitialValues(self, id):
+    def getImageInitialValues(self, type, id):
         data = {}
         imgObject = self.getImage(id)
         data['object'] = imgObject
@@ -1056,7 +1135,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
                 if chunk:
                     f.write(chunk)
 
-        data = self.ocrModel(filename, data)
+        data = self.ocrModel(filename, type, data)
         self.removeFile(filename)
 
         return imgObject, data
@@ -1094,27 +1173,21 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         except:
             self.sendErrorMessage(request, self.user_error_message)
             return self.redirectTemplate(self.redirect_logout_template_name)
-            
+
         if type == 'docx':
-            try:
-                docxObject = None
-                docxObject, data = self.getDocxInitialValues(id)
-                
-                if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
-                    self.deleteTest(docxObject)
-                    self.sendErrorMessage(request, self.values_error_message)
-                    self.addUserUploads(user)
-                    return self.redirectTemplate(self.redirect_docx_template_name)
-            except:
-                if docxObject != None: 
-                    self.deleteTest(docxObject)
+            docxObject = None
+            docxObject, data = self.getDocxInitialValues(id)
+            
+            if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
+                self.deleteTest(docxObject)
                 self.sendErrorMessage(request, self.values_error_message)
                 self.addUserUploads(user)
                 return self.redirectTemplate(self.redirect_docx_template_name)
+            
         elif type == 'pdf':
             try:
                 pdfObject = None
-                pdfObject, data = self.getPDFInitialValues(id)
+                pdfObject, data = self.getPDFInitialValues(type, id)
                 
                 if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
                     self.deleteTest(pdfObject)
@@ -1130,7 +1203,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         elif type == 'image' or type == 'picture':
             try:
                 imgObject = None
-                imgObject, data = self.getImageInitialValues(id)
+                imgObject, data = self.getImageInitialValues(type, id)
                 
                 if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
                     self.deleteTest(imgObject)
