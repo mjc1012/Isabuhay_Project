@@ -764,111 +764,6 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     template_name = 'CreateCBCTestResult.html'
     success_message = 'Create CBC Test Result Successful!'
 
-    def ocrModel(self, file_name, type, data):
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'static\\ocr\\vision-api.json'
-
-        client = vision.ImageAnnotatorClient()
-
-        with io.open(file_name, 'rb') as image_file:
-            content = image_file.read()
-
-        image = vision.Image(content=content)
-        response = client.text_detection(image=image)  
-        df = pd.DataFrame(columns=['locale', 'description'])
-
-        texts = response.text_annotations
-        for text in texts:
-            df = df.append(
-                dict(
-                    locale=text.locale,
-                    description=text.description
-                ),
-                ignore_index=True
-            )
-        
-        data['labNumber'] = df['description'][114]
-        data['source'] = df['description'][110]
-        data['pid'] = df['description'][9]
-
-        data['dateRequested'] = df['description'][18] + ' ' + df['description'][19] + ' ' + df['description'][20]
-        if "PM" in data['dateRequested']:
-            dateArr = data['dateRequested'].split()
-            
-            newHour = int(dateArr[1][:2]) + 12
-            
-            if newHour > 23:
-                data['dateRequested'] = data['dateRequested'][:-3]
-            else:
-                dateArr[1] = str(newHour) + dateArr[1][2:]
-                finalDate = dateArr[0] + " " + dateArr[1]
-                data['dateRequested'] = finalDate
-
-        elif "AM" in data['dateRequested']:
-            data['dateRequested'] = data['dateRequested'][:-3]
-
-        data['dateReceived'] = df['description'][126] + ' ' + df['description'][127] + ' ' + df['description'][128] 
-        if "PM" in data['dateReceived']:
-            dateArr = data['dateReceived'].split()
-            
-            newHour = int(dateArr[1][:2]) + 12
-            
-            if newHour > 23:
-                data['dateReceived'] = data['dateReceived'][:-3]
-            else:
-                dateArr[1] = str(newHour) + dateArr[1][2:]
-                finalDate = dateArr[0] + " " + dateArr[1]
-                data['dateReceived'] = finalDate
-
-        elif "AM" in data['dateReceived']:
-            data['dateReceived'] = data['dateReceived'][:-3]
-        
-        if type == 'image' or type == 'picture':
-            data['whiteBloodCells'] = df['description'][87]
-            data['redBloodCells'] = df['description'][88]
-            data['hemoglobin'] = df['description'][89]
-            data['hematocrit'] = df['description'][90]
-            data['meanCorpuscularVolume'] = df['description'][91]
-            data['meanCorpuscularHb'] = df['description'][92]
-            data['meanCorpuscularHbConc'] = df['description'][93]
-            data['rbcDistributionWidth'] = df['description'][94]
-            data['plateletCount'] = df['description'][95]
-            data['neutrophils'] = df['description'][96]
-            data['lymphocytes'] = df['description'][97]
-            data['monocytes'] = df['description'][98]
-            data['eosinophils'] = df['description'][99]
-            data['basophils'] = df['description'][100]
-            data['bands'] = df['description'][101]
-            data['absoluteNeutrophilsCount'] = df['description'][102]
-            data['absoluteLymphocyteCount'] = df['description'][103]
-            data['absoluteMonocyteCount'] = df['description'][104]
-            data['absoluteEosinophilCount'] = df['description'][105]
-            data['absoluteBasophilCount'] = df['description'][106]
-            data['absoluteBandCount'] = df['description'][107]
-        
-        elif type == 'pdf':
-            data['whiteBloodCells'] = df['description'][69]
-            data['redBloodCells'] = df['description'][70]
-            data['hemoglobin'] = df['description'][71]
-            data['hematocrit'] = df['description'][72]
-            data['meanCorpuscularVolume'] = df['description'][73]
-            data['meanCorpuscularHb'] = df['description'][74]
-            data['meanCorpuscularHbConc'] = df['description'][75]
-            data['rbcDistributionWidth'] = df['description'][76]
-            data['plateletCount'] = df['description'][77]
-            data['neutrophils'] = df['description'][78]
-            data['lymphocytes'] = df['description'][79]
-            data['monocytes'] = df['description'][80]
-            data['eosinophils'] = df['description'][81]
-            data['basophils'] = df['description'][82]
-            data['bands'] = df['description'][83]
-            data['absoluteNeutrophilsCount'] = df['description'][87]
-            data['absoluteLymphocyteCount'] = df['description'][90]
-            data['absoluteMonocyteCount'] = df['description'][95]
-            data['absoluteEosinophilCount'] = df['description'][99]
-            data['absoluteBasophilCount'] = df['description'][103]
-            data['absoluteBandCount'] = df['description'][107]
-
-        return data
 
     def getUser(self, request):
         return self.user_model.objects.get(id=request.user.id)
@@ -1075,9 +970,6 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         
         return docxObject, data
     
-    def removeFile(self, file):
-        os.remove(file) 
-
     def addUserUploads(self, user):
         user.uploads = user.uploads + 1
         user.save()
@@ -1202,8 +1094,6 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
 
         if 'Absolute' in values[149] and 'Band' in values[150] and 'Count' in values[151]:
             data['absoluteBandCount'] = values[152]
-
-        pdfFileObj.close()
         
         return pdfObject, data
 
