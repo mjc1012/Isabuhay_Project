@@ -20,16 +20,15 @@ from isabuhaywebapp.models import User
 from django.contrib import messages
 from datetime import date
 from isabuhaywebapp.models import CBCTestResult
-import os, io
+import os
 import pandas as pd
 from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import Q
-import requests
-from pdf2image import convert_from_path
+from pdfminer.high_level import extract_text
 from google.cloud import vision
 from smart_open import smart_open
-import PyPDF2
+
 
 class DisplayAdminPage(LoginRequiredMixin, TemplateView):
     template_name = 'displayAdminPage.html'
@@ -694,7 +693,7 @@ class CaptureCBCTestResultImage(LoginRequiredMixin, View):
         name = str(image.name).split('\\')[-1]
         name += '.png' 
         image.name = name
-        object = self.image_model.objects.create() 
+        object = self.image_model() 
         object.set_testImage(image)
         object.save()
         return object.get_id()
@@ -861,112 +860,85 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
 
         values = txt.split()
 
-        if 'PID' in values[4]:
-            data['pid'] = values[5]
+        data['pid'] = values[5]
 
-        if 'Source' in values[10]:
-            data['source'] = values[11]
+        data['source'] = values[11]
 
-        if 'Lab' in values[12] and 'Number' in values[13]:
-            data['labNumber'] = values[14]
+        data['labNumber'] = values[14]
 
-        if 'Requested' in values[22]:
-            data['dateRequested'] = values[23]+" "+values[24]+" "+values[25]
-            if "PM" in data['dateRequested']:
-                dateArr = data['dateRequested'].split()
-                
-                newHour = int(dateArr[1][:2]) + 12
-                
-                if newHour > 23:
-                    data['dateRequested'] = data['dateRequested'][:-3]
-                else:
-                    dateArr[1] = str(newHour) + dateArr[1][2:]
-                    finalDate = dateArr[0] + " " + dateArr[1]
-                    data['dateRequested'] = finalDate
-
-            elif "AM" in data['dateRequested']:
+        data['dateRequested'] = values[23]+" "+values[24]+" "+values[25]
+        if "PM" in data['dateRequested']:
+            dateArr = data['dateRequested'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
                 data['dateRequested'] = data['dateRequested'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateRequested'] = finalDate
 
-        if 'Received' in values[26]:
-            data['dateReceived'] = values[27]+" "+values[28]+" "+values[29]
-            if "PM" in data['dateReceived']:
-                dateArr = data['dateReceived'].split()
-                
-                newHour = int(dateArr[1][:2]) + 12
-                
-                if newHour > 23:
-                    data['dateReceived'] = data['dateReceived'][:-3]
-                else:
-                    dateArr[1] = str(newHour) + dateArr[1][2:]
-                    finalDate = dateArr[0] + " " + dateArr[1]
-                    data['dateReceived'] = finalDate
+        elif "AM" in data['dateRequested']:
+            data['dateRequested'] = data['dateRequested'][:-3]
 
-            elif "AM" in data['dateReceived']:
+        data['dateReceived'] = values[27]+" "+values[28]+" "+values[29]
+        if "PM" in data['dateReceived']:
+            dateArr = data['dateReceived'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
                 data['dateReceived'] = data['dateReceived'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateReceived'] = finalDate
 
-        if 'White' in values[39] and 'Blood' in values[40] and 'Cells' in values[41]:
-            data['whiteBloodCells'] = values[42]
+        elif "AM" in data['dateReceived']:
+            data['dateReceived'] = data['dateReceived'][:-3]
 
-        if 'Red' in values[45] and 'Blood' in values[46] and 'Cells' in values[47]:
-            data['redBloodCells'] = values[48]
+        data['whiteBloodCells'] = values[42]
 
-        if 'Hemoglobin' in values[51]:
-            data['hemoglobin'] = values[52]
+        data['redBloodCells'] = values[48]
 
-        if 'Hematocrit' in values[55]:
-            data['hematocrit'] = values[56]
+        data['hemoglobin'] = values[52]
 
-        if 'Mean' in values[59] and 'Corpuscular' in values[60] and 'Volume' in values[61]:
-            data['meanCorpuscularVolume'] = values[62]
+        data['hematocrit'] = values[56]
 
-        if 'Mean' in values[65] and 'Corpuscular' in values[66] and 'Hb' in values[67]:
-            data['meanCorpuscularHb'] = values[68]
+        data['meanCorpuscularVolume'] = values[62]
 
-        if 'Mean' in values[71] and 'Corpuscular' in values[72] and 'Hb' in values[73] and 'Conc' in values[74]:
-            data['meanCorpuscularHbConc'] = values[75]
+        data['meanCorpuscularHb'] = values[68]
 
-        if 'RBC' in values[78] and 'Distribution' in values[79] and 'Width' in values[80]:
-            data['rbcDistributionWidth'] = values[81]
+        data['meanCorpuscularHbConc'] = values[75]
 
-        if 'Platelet' in values[84] and 'Count' in values[85]:
-            data['plateletCount'] = values[86]
+        data['rbcDistributionWidth'] = values[81]
 
-        if 'Neutrophils' in values[92]:
-            data['neutrophils'] = values[93]
+        data['plateletCount'] = values[86]
 
-        if 'Lymphocytes' in values[96]:
-            data['lymphocytes'] = values[97]
+        data['neutrophils'] = values[93]
 
-        if 'Monocytes' in values[100]:
-            data['monocytes'] = values[101]
+        data['lymphocytes'] = values[97]
 
-        if 'Eosinophils' in values[104]:
-            data['eosinophils'] = values[105]
+        data['monocytes'] = values[101]
 
-        if 'Basophils' in values[108]:
-            data['basophils'] = values[109]
+        data['eosinophils'] = values[105]
 
-        if 'Bands' in values[112]:
-            data['bands'] = values[113]
+        data['basophils'] = values[109]
 
-        if 'Absolute' in values[119] and 'Neutrophils' in values[120] and 'Count' in values[121]:
-            data['absoluteNeutrophilsCount'] = values[122]
+        data['bands'] = values[113]
 
-        if 'Absolute' in values[125] and 'Lymphocyte' in values[126] and 'Count' in values[127]:
-            data['absoluteLymphocyteCount'] = values[128]
+        data['absoluteNeutrophilsCount'] = values[122]
 
-        if 'Absolute' in values[131] and 'Monocyte' in values[132] and 'Count' in values[133]:
-            data['absoluteMonocyteCount'] = values[134]
+        data['absoluteLymphocyteCount'] = values[128]
 
+        data['absoluteMonocyteCount'] = values[134]
 
-        if 'Absolute' in values[137] and 'Eosinophil' in values[138] and 'Count' in values[139]:
-            data['absoluteEosinophilCount'] = values[140]
+        data['absoluteEosinophilCount'] = values[140]
 
-        if 'Absolute' in values[143] and 'Basophil' in values[144] and 'Count' in values[145]:
-            data['absoluteBasophilCount'] = values[146]
+        data['absoluteBasophilCount'] = values[146]
 
-        if 'Absolute' in values[149] and 'Band' in values[150] and 'Count' in values[151]:
-            data['absoluteBandCount'] = values[152]
+        data['absoluteBandCount'] = values[152]
         
         return docxObject, data
     
@@ -983,117 +955,89 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         data['object'] = pdfObject
         FILE_PATH = pdfObject.testPDF.url
 
-        pdfReader = PyPDF2.PdfFileReader(smart_open(FILE_PATH, 'rb'))
-        pageObj = pdfReader.getPage(0)
-        
-        values = pageObj.extractText().split()
-        
-        if 'PID' in values[4]:
-            data['pid'] = values[5]
+        txt = extract_text(smart_open(FILE_PATH, 'rb'))
 
-        if 'Source' in values[10]:
-            data['source'] = values[11]
+        values = txt.split()
 
-        if 'Lab' in values[12] and 'Number' in values[13]:
-            data['labNumber'] = values[14]
+        data['pid'] = values[7]
 
-        if 'Requested' in values[22]:
-            data['dateRequested'] = values[23]+" "+values[24]+" "+values[25]
-            if "PM" in data['dateRequested']:
-                dateArr = data['dateRequested'].split()
-                
-                newHour = int(dateArr[1][:2]) + 12
-                
-                if newHour > 23:
-                    data['dateRequested'] = data['dateRequested'][:-3]
-                else:
-                    dateArr[1] = str(newHour) + dateArr[1][2:]
-                    finalDate = dateArr[0] + " " + dateArr[1]
-                    data['dateRequested'] = finalDate
+        data['source'] = values[5]
 
-            elif "AM" in data['dateRequested']:
+        data['labNumber'] = values[14]
+
+        data['dateRequested'] = values[23]+" "+values[24]+" "+values[25]
+        if "PM" in data['dateRequested']:
+            dateArr = data['dateRequested'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
                 data['dateRequested'] = data['dateRequested'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateRequested'] = finalDate
 
-        if 'Received' in values[26]:
-            data['dateReceived'] = values[27]+" "+values[28]+" "+values[29]
-            if "PM" in data['dateReceived']:
-                dateArr = data['dateReceived'].split()
-                
-                newHour = int(dateArr[1][:2]) + 12
-                
-                if newHour > 23:
-                    data['dateReceived'] = data['dateReceived'][:-3]
-                else:
-                    dateArr[1] = str(newHour) + dateArr[1][2:]
-                    finalDate = dateArr[0] + " " + dateArr[1]
-                    data['dateReceived'] = finalDate
+        elif "AM" in data['dateRequested']:
+            data['dateRequested'] = data['dateRequested'][:-3]
 
-            elif "AM" in data['dateReceived']:
+        data['dateReceived'] = values[27]+" "+values[28]+" "+values[29]
+        if "PM" in data['dateReceived']:
+            dateArr = data['dateReceived'].split()
+            
+            newHour = int(dateArr[1][:2]) + 12
+            
+            if newHour > 23:
                 data['dateReceived'] = data['dateReceived'][:-3]
+            else:
+                dateArr[1] = str(newHour) + dateArr[1][2:]
+                finalDate = dateArr[0] + " " + dateArr[1]
+                data['dateReceived'] = finalDate
 
-        if 'White' in values[39] and 'Blood' in values[40] and 'Cells' in values[41]:
-            data['whiteBloodCells'] = values[42]
+        elif "AM" in data['dateReceived']:
+            data['dateReceived'] = data['dateReceived'][:-3]
 
-        if 'Red' in values[45] and 'Blood' in values[46] and 'Cells' in values[47]:
-            data['redBloodCells'] = values[48]
+        data['whiteBloodCells'] = values[53]
 
-        if 'Hemoglobin' in values[51]:
-            data['hemoglobin'] = values[52]
+        data['redBloodCells'] = values[54]
 
-        if 'Hematocrit' in values[55]:
-            data['hematocrit'] = values[56]
+        data['hemoglobin'] = values[55]
 
-        if 'Mean' in values[59] and 'Corpuscular' in values[60] and 'Volume' in values[61]:
-            data['meanCorpuscularVolume'] = values[62]
+        data['hematocrit'] = values[56]
 
-        if 'Mean' in values[65] and 'Corpuscular' in values[66] and 'Hb' in values[67]:
-            data['meanCorpuscularHb'] = values[68]
+        data['meanCorpuscularVolume'] = values[57]
 
-        if 'Mean' in values[71] and 'Corpuscular' in values[72] and 'Hb' in values[73] and 'Conc' in values[74]:
-            data['meanCorpuscularHbConc'] = values[75]
+        data['meanCorpuscularHb'] = values[58]
 
-        if 'RBC' in values[78] and 'Distribution' in values[79] and 'Width' in values[80]:
-            data['rbcDistributionWidth'] = values[81]
+        data['meanCorpuscularHbConc'] = values[63]
 
-        if 'Platelet' in values[84] and 'Count' in values[85]:
-            data['plateletCount'] = values[86]
+        data['rbcDistributionWidth'] = values[99]
 
-        if 'Neutrophils' in values[92]:
-            data['neutrophils'] = values[93]
+        data['plateletCount'] = values[100]
 
-        if 'Lymphocytes' in values[96]:
-            data['lymphocytes'] = values[97]
+        data['neutrophils'] = values[101]
 
-        if 'Monocytes' in values[100]:
-            data['monocytes'] = values[101]
+        data['lymphocytes'] = values[102]
 
-        if 'Eosinophils' in values[104]:
-            data['eosinophils'] = values[105]
+        data['monocytes'] = values[103]
 
-        if 'Basophils' in values[108]:
-            data['basophils'] = values[109]
+        data['eosinophils'] = values[104]
 
-        if 'Bands' in values[112]:
-            data['bands'] = values[113]
+        data['basophils'] = values[105]
 
-        if 'Absolute' in values[119] and 'Neutrophils' in values[120] and 'Count' in values[121]:
-            data['absoluteNeutrophilsCount'] = values[122]
+        data['bands'] = values[106]
 
-        if 'Absolute' in values[125] and 'Lymphocyte' in values[126] and 'Count' in values[127]:
-            data['absoluteLymphocyteCount'] = values[128]
+        data['absoluteNeutrophilsCount'] = values[107]
 
-        if 'Absolute' in values[131] and 'Monocyte' in values[132] and 'Count' in values[133]:
-            data['absoluteMonocyteCount'] = values[134]
+        data['absoluteLymphocyteCount'] = values[108]
 
+        data['absoluteMonocyteCount'] = values[109]
 
-        if 'Absolute' in values[137] and 'Eosinophil' in values[138] and 'Count' in values[139]:
-            data['absoluteEosinophilCount'] = values[140]
+        data['absoluteEosinophilCount'] = values[110]
 
-        if 'Absolute' in values[143] and 'Basophil' in values[144] and 'Count' in values[145]:
-            data['absoluteBasophilCount'] = values[146]
+        data['absoluteBasophilCount'] = values[111]
 
-        if 'Absolute' in values[149] and 'Band' in values[150] and 'Count' in values[151]:
-            data['absoluteBandCount'] = values[152]
+        data['absoluteBandCount'] = values[112]
         
         return pdfObject, data
 
@@ -1238,7 +1182,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
                 self.addUserUploads(user)
                 return self.redirectTemplate(self.redirect_docx_template_name)
         elif type == 'pdf':
-            try:
+            try: 
                 pdfObject = None
                 pdfObject, data = self.getPDFInitialValues(type, id)
                 
@@ -1248,7 +1192,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
                     self.addUserUploads(user)
                     return self.redirectTemplate(self.redirect_pdf_template_name)
             except:
-                if pdfObject != None: 
+                if pdfObject != None:
                     self.deleteTest(pdfObject)
                 self.sendErrorMessage(request, self.values_error_message)
                 self.addUserUploads(user)
