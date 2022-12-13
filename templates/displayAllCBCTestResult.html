@@ -106,7 +106,7 @@ https://templatemo.com/tm-570-chain-app-dev
           {% for object in object_list %}
             <div class="col-lg-3" style="margin-top: 20px;">
               <div class="service-item first-service">
-                <a data-bs-toggle="modal" data-bs-target="#deleteModal{{ object.id }}"><i class="fa-solid fa-xmark xmark" style=" float: right; color: blue;"></i></a>
+                <a data-bs-toggle="modal" data-bs-target="#deleteModal{{ object.id }}"><i class="fa-solid fa-xmark xmark" style=" float: right; color: blue; cursor: pointer;"></i></a>
                 <div class="icon"></div>
                 <h4>CBC Test Result</h4>
                 <p>Lab Number: {{  object.labNumber }}<br>PID:{{ object.pid }}<br>Request Date:{{ object.dateRequested }}</p>
