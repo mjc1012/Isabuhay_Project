@@ -632,7 +632,7 @@ header
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1000px) {
   .background-header .main-nav .nav {
     margin-top: 80px !important;
   }
@@ -738,7 +738,7 @@ header
   }
 }
 
-@media (min-width: 767px) {
+@media (min-width: 1000px) {
   .header-area .main-nav .nav {
     display: flex !important;
   }
@@ -2026,7 +2026,7 @@ responsive
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1000px) {
   .the-clients .naccs .menu div {
     text-align: center;
   }
