@@ -205,15 +205,13 @@ https://templatemo.com/tm-570-chain-app-dev
     };
 
   async function startWebcam() {
-      try{
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-      video.srcObject = stream;
-      window.stream = stream;
-      }
-      catch (e){
-        console.log(e.toString())
-      }
-    
+      let promise = navigator.mediaDevices.getUserMedia({video:true});
+      promise.then(function(signal){
+        video.srcObject = signal;
+        video.play();
+      }).catch(function(err){
+        alert("Camera error: " + err)
+      })
   };
 
   var context = canvas.getContext('2d');
