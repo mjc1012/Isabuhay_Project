@@ -717,12 +717,8 @@ class CaptureCBCTestResultImage(LoginRequiredMixin, View):
             self.sendErrorMessage(request, self.user_error_message)
             return self.redirectTemplate(self.redirect_logout_template_name)
 
-        try:
-            self.deductAvailableUploads(user)
-            image_id = self.saveImage(request)
-        except:
-            self.sendErrorMessage(request, self.saving_error_message)
-            return self.renderTemplate(request, self.template_name)
+        self.deductAvailableUploads(user)
+        image_id = self.saveImage(request)
 
         self.sendSuccessMessage(request, self.success_message)
         return self.redirectTemplate(self.redirect_create_template_name, 'picture', image_id)
