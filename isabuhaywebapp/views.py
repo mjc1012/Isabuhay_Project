@@ -846,9 +846,8 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     def getDocument(self, id):
         return self.docx_model.objects.get(id=id)
 
-    def getDocxInitialValues(self, id):
+    def getDocxInitialValues(self, docxObject, id):
         data = {}
-        docxObject = self.getDocument(id)
         data['object'] = docxObject
         FILE_PATH = docxObject.testDocx.url
         txt = d2t.process(smart_open(FILE_PATH, 'rb'))
@@ -935,7 +934,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
 
         data['absoluteBandCount'] = values[152]
         
-        return docxObject, data
+        return data
     
     def addUserUploads(self, user):
         user.uploads = user.uploads + 1
@@ -944,9 +943,8 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     def getPDF(self, id):
         return self.pdf_model.objects.get(id=id)
     
-    def getPDFInitialValues(self, type, id):
+    def getPDFInitialValues(self, pdfObject, id):
         data = {}
-        pdfObject = self.getPDF(id)
         data['object'] = pdfObject
         FILE_PATH = pdfObject.testPDF.url
 
@@ -1034,14 +1032,13 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
 
         data['absoluteBandCount'] = values[112]
         
-        return pdfObject, data
+        return data
 
     def getImage(self, id):
         return self.image_model.objects.get(id=id)
 
-    def getImageInitialValues(self, type, id):
+    def getImageInitialValues(self, imgObject, id):
         data = {}
-        imgObject = self.getImage(id)
         data['object'] = imgObject
         FILE_PATH = imgObject.testImage.url
 
@@ -1122,7 +1119,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         data['absoluteBasophilCount'] = df['description'][106]
         data['absoluteBandCount'] = df['description'][107]
 
-        return imgObject, data
+        return data
     
     def deleteTest(self, object):
         object.delete()
@@ -1160,42 +1157,40 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
 
         if type == 'docx':
             try: 
-                docxObject = None
-                docxObject, data = self.getDocxInitialValues(id)
+                docxObject = self.getDocument(id)
+                data = self.getDocxInitialValues(docxObject, id)
                 
-                if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
+                if (data['source'] != "APPCARE" and data['source'] != "WEBCARE") or data['labNumber'].isnumeric() == False: 
                     self.deleteTest(docxObject)
                     self.sendErrorMessage(request, self.values_error_message)
                     self.addUserUploads(user)
                     return self.redirectTemplate(self.redirect_docx_template_name)
             except:
-                if docxObject != None: 
-                    self.deleteTest(docxObject)
+                self.deleteTest(docxObject)
                 self.sendErrorMessage(request, self.values_error_message)
                 self.addUserUploads(user)
                 return self.redirectTemplate(self.redirect_docx_template_name)
         elif type == 'pdf':
             try: 
-                pdfObject = None
-                pdfObject, data = self.getPDFInitialValues(type, id)
+                pdfObject = self.getPDF(id)
+                data = self.getPDFInitialValues(pdfObject, id)
                 
-                if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
+                if (data['source'] != "APPCARE" and data['source'] != "WEBCARE") or data['labNumber'].isnumeric() == False: 
                     self.deleteTest(pdfObject)
                     self.sendErrorMessage(request, self.values_error_message)
                     self.addUserUploads(user)
                     return self.redirectTemplate(self.redirect_pdf_template_name)
             except:
-                if pdfObject != None:
-                    self.deleteTest(pdfObject)
+                self.deleteTest(pdfObject)
                 self.sendErrorMessage(request, self.values_error_message)
                 self.addUserUploads(user)
                 return self.redirectTemplate(self.redirect_pdf_template_name)
         elif type == 'image' or type == 'picture':
-            try:
-                imgObject = None
-                imgObject, data = self.getImageInitialValues(type, id)
+            try: 
+                imgObject = self.getImage(id)
+                data = self.getImageInitialValues(imgObject, id)
                 
-                if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
+                if (data['source'] != "APPCARE" and data['source'] != "WEBCARE") or data['labNumber'].isnumeric() == False: 
                     self.deleteTest(imgObject)
                     self.sendErrorMessage(request, self.picture_error_message)
                     self.addUserUploads(user)
@@ -1204,8 +1199,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
                     elif type == 'picture':
                         return self.redirectTemplate(self.redirect_picture_template_name)
             except:
-                if imgObject != None: 
-                    self.deleteTest(imgObject)
+                self.deleteTest(imgObject)
                 self.sendErrorMessage(request, self.picture_error_message)
                 self.addUserUploads(user)
                 if type == 'image':
