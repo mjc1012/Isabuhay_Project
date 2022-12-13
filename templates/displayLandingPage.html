@@ -47,28 +47,33 @@ https://templatemo.com/tm-570-chain-app-dev
       </div>
     </div>
     <!-- ***** Preloader End ***** -->
-  
+
     <!-- ***** Header Area Start ***** -->
-    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <nav class="main-nav">
-              <!-- ***** Logo Start ***** -->
-               <a href="#" class="logo">
-                <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev" w>
-              </a>
-              <ul class="nav">
-                <li class="scroll-to-section"><a href="{% url 'CreateAccountPage' %}">Sign up</a></li>
+  <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="#" class="logo">
+              <img src="{% static 'assets/images/logo.png' %}" alt="Chain App Dev">
+            </a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li class="scroll-to-section"><a href="{% url 'CreateAccountPage' %}">Sign up</a></li>
                 <li class="scroll-to-section"><a href="{% url 'DisplayLoginPage' %}">Sign in</a></li>
-                <li></li>
-              </ul>  
-            </nav>
-          </div>
+            </ul>       
+            <a class='menu-trigger'>
+                <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
         </div>
       </div>
-    </header>
-    <!-- ***** Header Area End ***** -->
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
 
 
     <div id="All CBC" class="services section">

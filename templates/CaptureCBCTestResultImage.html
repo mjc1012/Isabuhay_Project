@@ -118,8 +118,8 @@ https://templatemo.com/tm-570-chain-app-dev
           <div class="container">
             <div class="row">
               <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.5s">
-                <div style="height: 480px; width: 640; background-color: grey; border-radius: 25px; position: relative; top: auto;">
-                    <video id="video" style="background-color: #00abf0; width: 100%; height: 100%; border-radius: 25px;" autoplay>Video stream not available.</video>
+                <div>
+                    <video id="video"  width="640" height="480" style="background-color: #00abf0; border-radius: 25px; margin: auto;" autoplay>Video stream not available.</video>
                 </div>
                 <br>
                 <button id="takepicture">Take photo</button>
@@ -128,7 +128,7 @@ https://templatemo.com/tm-570-chain-app-dev
               </div>
               <div class="col-lg-6 wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
                 <div>
-                  <canvas id="canvas" width="640" height="480" style="background-color: #00abf0; border-radius: 25px;"></canvas>
+                  <canvas id="canvas" width="640" height="480" style="background-color: #00abf0; border-radius: 25px; margin: auto;"></canvas>
                 </div>
                 <br>
                 <form method="POST" action="." id="msform" enctype='multipart/form-data'>
@@ -205,7 +205,7 @@ https://templatemo.com/tm-570-chain-app-dev
     };
 
   async function startWebcam() {
-      let promise = navigator.mediaDevices.getUserMedia({video:true});
+    let promise = navigator.mediaDevices.getUserMedia({video:true});
       promise.then(function(signal){
         video.srcObject = signal;
         video.play();

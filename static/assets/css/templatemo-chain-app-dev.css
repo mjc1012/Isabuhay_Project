@@ -324,10 +324,6 @@ header
   transform: translateX(-50%);
 }
 
-.background-header .nav li:last-child a.active:after {
-  background-color: transparent;
-}
-
 .header-area {
   background-color: transparent;
   border-bottom: 1px solid rgba(42,42,42,0.2);
@@ -390,25 +386,6 @@ header
   padding-right: 20px;
 }
 
-.header-area .main-nav .nav li:nth-child(6) {
-  padding-right: 0px;
-  padding-left: 40px;
-}
-
-.header-area .main-nav .nav li:last-child a ,
-.background-header .main-nav .nav li:last-child a,
-.header-area .main-nav .nav li:nth-child(6) a ,
-.background-header .main-nav .nav li:nth-child(6) a {
-  padding: 0px 20px !important;
-  font-weight: 400;
-}
-
-.header-area .main-nav .nav li:last-child a:hover ,
-.background-header .main-nav .nav li:last-child a:hover,
-.header-area .main-nav .nav li:nth-child(6) a:hover ,
-.background-header .main-nav .nav li:nth-child(6) a:hover {
-  color: #fff !important;
-}
 
 .header-area .main-nav .nav li a {
   display: block;
@@ -431,9 +408,6 @@ header
   color: #4b8ef1!important;
 }
 
-.header-area .main-nav .nav li:last-child a.active {
-  color: #fff !important;
-}
 
 .background-header .main-nav .nav li:hover a,
 .background-header .main-nav .nav li a.active {
@@ -653,24 +627,12 @@ header
 }
 
 @media (max-width: 992px) {
-  .header-area .main-nav .nav li:last-child  ,
-  .background-header .main-nav .nav li:last-child {
-    color: #069;
-  }
-  .header-area .main-nav .nav li:nth-child(6),
-  .background-header .main-nav .nav li:nth-child(6) {
-    padding-right: 0px;
-  }
   .background-header .nav li a.active:after {
     display: none;
   }
 }
 
 @media (max-width: 767px) {
-  .pre-header ul.info li:last-child,
-  .pre-header ul.info li:nth-child(6) {
-    display: none!important;
-  }
   .background-header .main-nav .nav {
     margin-top: 80px !important;
   }
@@ -1395,10 +1357,6 @@ The Clients
   margin-bottom: 15px;
 }
 
-.pricing-item-regular ul li:last-child {
-  margin-bottom: 0px;
-}
-
 .pricing-item-regular ul li.non-function {
   color: #afafaf;
   text-decoration: line-through;
@@ -1470,10 +1428,6 @@ The Clients
   color: #4b8ef1;
   font-size: 15px;
   margin-bottom: 15px;
-}
-
-.pricing-item-pro ul li:last-child {
-  margin-bottom: 0px;
 }
 
 .pricing-item-pro ul li.non-function {
@@ -1656,10 +1610,6 @@ footer #search button:hover {
 
 .footer-widget ul li {
   margin-bottom: 10px;
-}
-
-.footer-widget ul li:last-child {
-  margin-bottom: 0px;
 }
 
 .footer-widget ul li a {
@@ -1953,9 +1903,6 @@ responsive
   .header-area .main-nav .logo h4 img {
     max-width: 25px;
     margin-left: 0px;
-  }
-  .header-area .main-nav .nav li:last-child {
-    padding-left: 20px;
   }
   
   .main-banner .left-content h2 {
