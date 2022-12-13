@@ -112,16 +112,16 @@ https://templatemo.com/tm-570-chain-app-dev
                 <h4 class="fs-subtitle">(Just refresh page to revert back to initial values)</h4>
                 <table style="width: 100%;">
                   <tr><td colspan="3">
-                    <label>Source:</label>
-                    <input type="text"  name="source" required value="{{source}}" >
+                    <label>PID Number:</label>
+                    <input type="text"  name="pid" required  value="{{pid}}" >
                   </td></tr>
                   <tr><td colspan="3">
                     <label>Lab Number:</label>
-                    <input type="number"  name="labNumber" required value="{{labNumber}}" >
+                    <input type="number"  name="labNumber" required value="{{labNumber}}">
                   </td></tr>
                 <tr><td colspan="3">
-                  <label>PID Number:</label>
-                  <input type="text"  name="pid" required  value="{{pid}}" >
+                  <label>Source:</label>
+                  <input type="text"  name="source" pattern="(APPCARE|WEBCARE)" title="source can only be either APPCARE or WEBCARE" required value="{{source}}">
                 </td></tr>
                 <tr><td colspan="3">
                   <label>Date Requested in 24-Hour Time Format (MM-DD-YYYY HH:MM):</label>
