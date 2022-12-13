@@ -201,49 +201,27 @@ https://templatemo.com/tm-570-chain-app-dev
   const select = document.getElementById('select');
   let currentStream;
 
-  function stopMediaTracks(stream) {
-    stream.getTracks().forEach(track => {
-      track.stop();
-    });
-  }
 
-  function gotDevices(mediaDevices) {
-    select.innerHTML = '';
-    select.appendChild(document.createElement('option'));
-    let count = 1;
-    mediaDevices.forEach(mediaDevice => {
-      if (mediaDevice.kind === 'videoinput') {
-        const option = document.createElement('option');
-        option.value = mediaDevice.deviceId;
-        const label = mediaDevice.label || `Camera ${count++}`;
-        const textNode = document.createTextNode(label);
-        option.appendChild(textNode);
-        select.appendChild(option);
-      }
-    });
-  }
-
-  button.addEventListener('click', event => {
-    if (typeof currentStream !== 'undefined') {
-      stopMediaTracks(currentStream);
-    }
-    const videoConstraints = {};
-    if (select.value !== '') {
-      videoConstraints.deviceId = { exact: select.value };
-      
-    const constraints = {
+  
+  const constraints = {
       video: {
-        width: {min: 1024, ideal: 1280, max: 1920},
-        height: {min: 576, ideal: 720, max: 1080}
+        width: 640,
+        height: 480
       },
       audio: false
     };
-    const stream = navigator.mediaDevices
-      .getUserMedia(constraints);
+
+  async function startWebcam() {
+      try{
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
       video.srcObject = stream;
       window.stream = stream;
-    }
-  });
+      }
+      catch (e){
+        console.log(e.toString())
+      }
+    
+  };
 
   var context = canvas.getContext('2d');
   
@@ -254,6 +232,8 @@ https://templatemo.com/tm-570-chain-app-dev
     photo.setAttribute('src', data);
 
   });
+
+  startWebcam();
   </script> 
 </body>
 </html>
