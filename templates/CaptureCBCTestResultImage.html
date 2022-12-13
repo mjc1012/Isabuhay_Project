@@ -107,15 +107,6 @@ https://templatemo.com/tm-570-chain-app-dev
             <h4>Capture <em>Image</em></h4>
             <img src="{% static 'assets/images/heading-line-dec.png' %}" alt="">
             <p><a href="{% url 'AddingCBCTestResultOptions' %}">Go Back To Adding Options</a></p>
-            <p>Want to use your phone to take the picture? Click <a href="https://www.youtube.com/watch?v=J7iXt9fLI2U&t=222s" target="_blank">Here</a> To Know How</p>
-            <br>
-            <h5>Choose Camera</h5>
-            <select id="select">
-              <option></option>
-            </select>
-            <br>
-            <br>
-            <div id="button" style="cursor: pointer;">Open camera</div>
           </div>
         </div>
       </div>
@@ -234,64 +225,6 @@ https://templatemo.com/tm-570-chain-app-dev
   });
 
   startWebcam();
-
-  $(function() {
-    $("#submit").click(function() {
-        html2canvas($("#section_to_capture"), {
-            onrendered: function(canvas) {
-
-    function b64toBlob(b64Data, contentType, sliceSize) {
-        contentType = contentType || '';
-        sliceSize = sliceSize || 512;
-
-        var byteCharacters = atob(b64Data);
-        var byteArrays = [];
-
-        for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            var slice = byteCharacters.slice(offset, offset + sliceSize);
-            var byteNumbers = new Array(slice.length);
-            for (var i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-            var byteArray = new Uint8Array(byteNumbers);
-            byteArrays.push(byteArray);
-        }
-
-      var blob = new Blob(byteArrays, {type: contentType});
-      return blob;
-}
-
-    image_data = canvas.toDataURL('image/jpg'); 
-    var block = image_data.split(";");
-    var contentType = block[0].split(":")[1]
-    var realData = block[1].split(",")[1];
-
-    var blob = b64toBlob(realData, contentType);
-    var formData = new FormData();
-    formData.append("screenshot", blob, 'screenshot.png');
-
-      $.ajax({
-            url: "/api/save_screenshot/",
-            type: "POST",
-            timeout: 0,
-            processData: false,
-            mimeType: "multipart/form-data",
-            contentType: false,
-            data: formData,
-            dataType:"json",
-            success: function (data) {
-                   alert("Screenshot saved successfully!");
-            },
-            error: function (e) {
-                console.log(e);
-            }
-            }).done(function(o) {
-
-           });
-            }
-        });
-    });
-});
   </script> 
 </body>
 </html>
