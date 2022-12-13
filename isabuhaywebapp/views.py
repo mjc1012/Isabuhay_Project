@@ -686,15 +686,13 @@ class CaptureCBCTestResultImage(LoginRequiredMixin, View):
 
     def saveImage(self, request):
         image_path = request.POST["src"] 
-        image = NamedTemporaryFile()
-        image.write(urlopen(image_path).read())
-        image.flush()
-        image = File(image)
-        name = str(image.name).split('\\')[-1]
-        name += '.png' 
-        image.name = name
+        image_temp_file = NamedTemporaryFile()
+        image_temp_file.write(urlopen(image_path).read())
+        file_name = 'cbc.jpg'
+        image_temp_file.flush()
+        temp_file = File(image_temp_file, name=file_name)
         object = self.image_model() 
-        object.set_testImage(image)
+        object.set_testImage(temp_file)
         object.save()
         return object.get_id()
 
@@ -719,6 +717,7 @@ class CaptureCBCTestResultImage(LoginRequiredMixin, View):
 
         self.deductAvailableUploads(user)
         image_id = self.saveImage(request)
+
 
         self.sendSuccessMessage(request, self.success_message)
         return self.redirectTemplate(self.redirect_create_template_name, 'picture', image_id)
