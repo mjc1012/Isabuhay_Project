@@ -1196,15 +1196,25 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
                 self.addUserUploads(user)
                 return self.redirectTemplate(self.redirect_pdf_template_name)
         elif type == 'image' or type == 'picture':
-            imgObject = None
-            imgObject, data = self.getImageInitialValues(type, id)
-            
-            if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
-                self.deleteTest(imgObject)
+            try:
+                imgObject = None
+                imgObject, data = self.getImageInitialValues(type, id)
+                
+                if data['source'] == None or data['labNumber'] == None or data['pid'] == None: 
+                    self.deleteTest(imgObject)
+                    self.sendErrorMessage(request, self.picture_error_message)
+                    self.addUserUploads(user)
+                    if type == 'image':
+                        return self.redirectTemplate(self.redirect_image_template_name)
+                    elif type == 'picture':
+                        return self.redirectTemplate(self.redirect_picture_template_name)
+            except:
+                if imgObject != None: 
+                    self.deleteTest(imgObject)
                 self.sendErrorMessage(request, self.picture_error_message)
                 self.addUserUploads(user)
                 if type == 'image':
-                    return self.redirectTemplate(self.redirect_image_template_name)
+                        return self.redirectTemplate(self.redirect_image_template_name)
                 elif type == 'picture':
                     return self.redirectTemplate(self.redirect_picture_template_name)
         else:
