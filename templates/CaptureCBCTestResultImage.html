@@ -232,20 +232,16 @@ https://templatemo.com/tm-570-chain-app-dev
       videoConstraints.deviceId = { exact: select.value };
       
     const constraints = {
-      video: videoConstraints,
+      video: {
+        width: {min: 1024, ideal: 1280, max: 1920},
+        height: {min: 576, ideal: 720, max: 1080}
+      },
       audio: false
     };
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then(stream => {
-        currentStream = stream;
-        video.srcObject = stream;
-        return navigator.mediaDevices.enumerateDevices();
-      })
-      .then(gotDevices)
-      .catch(error => {
-        console.error(error);
-      });
+    const stream = navigator.mediaDevices
+      .getUserMedia(constraints);
+      video.srcObject = stream;
+      window.stream = stream;
     }
   });
 
@@ -258,8 +254,6 @@ https://templatemo.com/tm-570-chain-app-dev
     photo.setAttribute('src', data);
 
   });
-
-  navigator.mediaDevices.enumerateDevices().then(gotDevices);
   </script> 
 </body>
 </html>
