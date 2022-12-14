@@ -1059,8 +1059,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
             json_data)
 
         # pass credentials AND project name to new client object (did not work wihout project name)
-        client = vision.ImageAnnotatorClient(
-            project=gcp_project, credentials=credentials)
+        client = vision.ImageAnnotatorClient(credentials=credentials)
 
         with smart_open(FILE_PATH, 'rb') as image_file:
             content = image_file.read()
