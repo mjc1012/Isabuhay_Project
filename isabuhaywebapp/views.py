@@ -28,6 +28,8 @@ from django.db.models import Q
 from pdfminer.high_level import extract_text
 from google.cloud import vision
 from smart_open import smart_open
+from google.oauth2 import service_account
+import json
 
 
 class DisplayAdminPage(LoginRequiredMixin, TemplateView):
@@ -1042,7 +1044,23 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         data['object'] = imgObject
         FILE_PATH = imgObject.testImage.url
 
-        client = vision.ImageAnnotatorClient()
+        # the json credentials stored as env variable
+        json_str = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+        # project name
+        gcp_project = os.environ.get('Isabuhay_Project') 
+
+        # generate json - if there are errors here remove newlines in .env
+        json_data = json.loads(json_str)
+        # the private_key needs to replace \n parsed as string literal with escaped newlines
+        json_data['private_key'] = json_data['private_key'].replace('\\n', '\n')
+
+        # use service_account to generate credentials object
+        credentials = service_account.Credentials.from_service_account_info(
+            json_data)
+
+        # pass credentials AND project name to new client object (did not work wihout project name)
+        client = vision.Client(
+            project=gcp_project, credentials=credentials)
 
         with smart_open(FILE_PATH, 'rb') as image_file:
             content = image_file.read()
