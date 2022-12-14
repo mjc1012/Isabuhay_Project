@@ -1045,7 +1045,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
         FILE_PATH = imgObject.testImage.url
 
         # the json credentials stored as env variable
-        json_str = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+        json_str = os.environ.get('GOOGLE_CREDENTIALS')
         # project name
         gcp_project = os.environ.get('Isabuhay_Project') 
 
