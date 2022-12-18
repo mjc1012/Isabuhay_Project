@@ -1115,21 +1115,6 @@ About Us
   z-index: 1;
 }
 
-.about-us:after {
-  background-image: url(../images/about-bg.jpg);
-  width: 777px;
-  height: 1132px;
-  content: '';
-  position: absolute;
-  background-repeat: no-repeat;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 0;
-}
-
-
-
 /* 
 ---------------------------------------------
 The Clients
