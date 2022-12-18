@@ -848,7 +848,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     def getDocument(self, id):
         return self.docx_model.objects.get(id=id)
 
-    def getDocxInitialValues(self, docxObject, id):
+    def getDocxInitialValues(self, docxObject):
         data = {}
         data['object'] = docxObject
         FILE_PATH = docxObject.testDocx.url
@@ -945,7 +945,7 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     def getPDF(self, id):
         return self.pdf_model.objects.get(id=id)
     
-    def getPDFInitialValues(self, pdfObject, id):
+    def getPDFInitialValues(self, pdfObject):
         data = {}
         data['object'] = pdfObject
         FILE_PATH = pdfObject.testPDF.url
@@ -1039,26 +1039,18 @@ class CreateCBCTestResult(LoginRequiredMixin, View):
     def getImage(self, id):
         return self.image_model.objects.get(id=id)
 
-    def getImageInitialValues(self, imgObject, id):
+    def getImageInitialValues(self, imgObject):
         data = {}
         data['object'] = imgObject
         FILE_PATH = imgObject.testImage.url
 
-        # the json credentials stored as env variable
         json_str = os.environ.get('GOOGLE_CREDENTIALS')
-        # project name
-        gcp_project = os.environ.get('Isabuhay_Project') 
-
-        # generate json - if there are errors here remove newlines in .env
         json_data = json.loads(json_str)
-        # the private_key needs to replace \n parsed as string literal with escaped newlines
         json_data['private_key'] = json_data['private_key'].replace('\\n', '\n')
 
-        # use service_account to generate credentials object
         credentials = service_account.Credentials.from_service_account_info(
             json_data)
 
-        # pass credentials AND project name to new client object (did not work wihout project name)
         client = vision.ImageAnnotatorClient(credentials=credentials)
 
         with smart_open(FILE_PATH, 'rb') as image_file:
