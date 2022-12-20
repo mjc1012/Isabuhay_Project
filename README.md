@@ -1,6 +1,6 @@
 # Isabuhay_Project
 
-To deploy this project, follow this steps:
+To deploy this project, follow these steps:
 1. Install postgresql from "https://www.postgresql.org/download/"
 2. Install pgAdmin from "https://www.pgadmin.org/download/"
 3. Create a AWS Account
