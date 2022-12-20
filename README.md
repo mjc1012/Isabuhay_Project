@@ -34,9 +34,10 @@ To deploy this project, follow this steps:
 
 To run this project locally, follow these steps:
 1. Follow the steps 1-20 above
-2. Install virtual environment. Type in your command prompt "pip install virtualenv"
-3. Create a virtual enviroment. Type in your command prompt "virtualenv envName"
-4. Activate the virtual environment. Go to the path of the virtual environment in the command prompt then type "Scripts\activate"
-5. Install all the libraries in the requirements.txt file. Type in the command prompt "pip install -r requirements.txt"
-6. Type in the command prompt "python manage.py runserver"
-7. The admin's username is "admin" and the password is "corral123"
+2. Add the Google Application Credientials as an environment variable of your pc
+3. Install virtual environment. Type in your command prompt "pip install virtualenv"
+4. Create a virtual enviroment. Type in your command prompt "virtualenv envName"
+5. Activate the virtual environment. Go to the path of the virtual environment in the command prompt then type "Scripts\activate"
+6. Install all the libraries in the requirements.txt file. Type in the command prompt "pip install -r requirements.txt"
+7. Type in the command prompt "python manage.py runserver"
+8. The admin's username is "admin" and the password is "corral123"
